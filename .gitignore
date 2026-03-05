@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+# CFFI build artifacts
+pyminidsp/_minidsp_cffi.c
+pyminidsp/_minidsp_cffi.o
+*.o
+
+# Temporary / build directories
+tmp/
+pyminidsp/tmp/
+pyminidsp/pyminidsp/
+
 # Distribution / packaging
 .Python
 build/
