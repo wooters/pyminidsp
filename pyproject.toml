@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=64", "cffi>=1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyminidsp"
+version = "0.1.0"
+description = "Python bindings to the miniDSP C library"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Chuck Wooters"},
+]
+keywords = ["dsp", "audio", "signal-processing", "fft", "biquad", "cffi"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "cffi>=1.0",
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+docs = [
+    "sphinx>=7.0",
+    "furo",
+    "sphinx-copybutton",
+]
+
+[project.urls]
+Homepage = "https://github.com/wooters/pyminidsp"
+Repository = "https://github.com/wooters/pyminidsp"
+Documentation = "https://wooters.github.io/pyminidsp/"
+Issues = "https://github.com/wooters/pyminidsp/issues"
+
+[tool.setuptools.packages.find]
+include = ["pyminidsp*"]
+
+# ---------------------------------------------------------------------------
+# cibuildwheel configuration
+# ---------------------------------------------------------------------------
+[tool.cibuildwheel]
+# Build for CPython only (no PyPy — CFFI ABI mode would work but we use
+# API mode which compiles a C extension)
+build = "cp39-* cp310-* cp311-* cp312-* cp313-*"
+
+# Skip 32-bit builds and musl (FFTW3 is harder to get on Alpine)
+skip = "*-win32 *-manylinux_i686 *-musllinux_*"
+
+# Install FFTW3 and clone the miniDSP C source before each wheel build
+before-all = [
+    "git clone --depth 1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+]
+
+[tool.cibuildwheel.environment]
+MINIDSP_SRC = "/tmp/miniDSP"
+
+# --- Linux (manylinux) ---
+[tool.cibuildwheel.linux]
+before-all = [
+    "yum install -y fftw-devel || apt-get update && apt-get install -y libfftw3-dev",
+    "git clone --depth 1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+]
+
+# --- macOS ---
+[tool.cibuildwheel.macos]
+before-all = [
+    "brew install fftw",
+    "git clone --depth 1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+]
+
+# --- Windows ---
+[tool.cibuildwheel.windows]
+before-all = [
+    "git clone --depth 1 https://github.com/wooters/miniDSP.git C:/miniDSP",
+    "choco install fftw -y || vcpkg install fftw3:x64-windows",
+]
+environment = { MINIDSP_SRC = "C:/miniDSP" }
