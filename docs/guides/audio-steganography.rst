@@ -57,6 +57,35 @@ Hiding text
                               sample_rate=44100.0, method=md.STEG_LSB)
    print(f"Encoded {n} bytes")
 
+**Listen** — compare the host signal and the stego outputs:
+
+*Original host (440 Hz sine):*
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/steg_host.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+*LSB-encoded (sounds identical):*
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/steg_lsb.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+*Frequency-band encoded (faint high-frequency tones):*
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/steg_freq.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 
 Recovering text
 ---------------

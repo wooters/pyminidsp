@@ -25,6 +25,29 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
+
+# -- Generate audio samples at build time ------------------------------------
+def _generate_audio(app):
+    """Generate WAV audio samples before the build reads source files."""
+    audio_dir = os.path.join(app.srcdir, "_static", "audio")
+    marker = os.path.join(audio_dir, ".generated")
+    if os.path.exists(marker):
+        return  # already generated this build
+    try:
+        from gen_audio_samples import generate
+        print("Generating audio samples for documentation...")
+        generate(audio_dir)
+        # Write marker so we don't regenerate on every rebuild
+        with open(marker, "w") as f:
+            f.write("ok\n")
+    except Exception as exc:
+        print(f"Warning: audio sample generation failed: {exc}")
+        print("Audio previews will not be available in the built docs.")
+
+
+def setup(app):
+    app.connect("builder-inited", _generate_audio)
+
 # -- Autodoc ------------------------------------------------------------------
 autodoc_mock_imports = ["pyminidsp._minidsp_cffi"]
 autodoc_member_order = "bysource"

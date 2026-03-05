@@ -23,6 +23,24 @@ geometrically:
    echoed = md.delay_echo(signal, delay_samples=4410,
                            feedback=0.5, dry=1.0, wet=0.5)
 
+**Before:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_delay_before.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+**After:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_delay_after.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 
 Tremolo
 -------
@@ -37,6 +55,24 @@ Amplitude modulation by a sinusoidal LFO.  The gain oscillates between
 .. code-block:: python
 
    tremmed = md.tremolo(signal, rate_hz=5.0, depth=0.5, sample_rate=44100.0)
+
+**Before:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_tremolo_before.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+**After:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_tremolo_after.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 Comb-filter reverb
@@ -54,6 +90,24 @@ that simulate reverberation:
 
    reverbed = md.comb_reverb(signal, delay_samples=1000,
                               feedback=0.5, dry=1.0, wet=0.3)
+
+**Before:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_comb_before.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+**After:**
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/effect_comb_after.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 Verification tips

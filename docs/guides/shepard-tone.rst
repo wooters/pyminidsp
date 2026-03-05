@@ -61,6 +61,33 @@ Example
                           sample_rate=44100.0, rate_octaves_per_sec=0.5,
                           num_octaves=8)
 
+**Listen** — rising Shepard tone (5 seconds):
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/shepard_rising.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+**Falling** Shepard tone:
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/shepard_falling.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
+**Static** chord (rate = 0):
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/shepard_static.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 
 Key parameters
 --------------

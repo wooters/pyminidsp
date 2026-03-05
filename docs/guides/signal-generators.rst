@@ -23,6 +23,15 @@ The fundamental test signal — a pure tone at a single frequency:
    # Verify: the FFT peak should align with the expected frequency bin
    mag = md.magnitude_spectrum(signal)
 
+**Listen** — 440 Hz, 2 seconds:
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/sine_440hz.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 
 Impulse (Kronecker delta)
 -------------------------
@@ -37,6 +46,15 @@ convolution and has a perfectly flat magnitude spectrum.
 
    # Flat spectrum — all bins have equal magnitude
    mag = md.magnitude_spectrum(imp)
+
+**Listen** — impulse train (4 clicks at 0.5 s intervals):
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/impulse_train.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 Chirp (swept sine)
@@ -53,6 +71,13 @@ instantaneous frequency traces a straight diagonal in the spectrogram.
    chirp = md.chirp_linear(16000, amplitude=1.0, f_start=200.0,
                             f_end=4000.0, sample_rate=16000.0)
 
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/chirp_linear.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 **Logarithmic chirp** — exponential sweep, spending equal time per
 octave.  Ideal for measuring systems on a log-frequency axis.
 
@@ -61,6 +86,13 @@ octave.  Ideal for measuring systems on a log-frequency axis.
    # Full audible range sweep: 20 Hz to 20 kHz
    chirp = md.chirp_log(44100, amplitude=1.0, f_start=20.0,
                          f_end=20000.0, sample_rate=44100.0)
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/chirp_log.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 Square wave
@@ -74,6 +106,13 @@ decaying as 1/k — a textbook demonstration of the Gibbs phenomenon.
 
    sq = md.square_wave(4096, amplitude=1.0, freq=440.0, sample_rate=44100.0)
 
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/square_440hz.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 
 Sawtooth wave
 -------------
@@ -85,6 +124,13 @@ harmonic content than the square wave's odd-only series.
 .. code-block:: python
 
    saw = md.sawtooth_wave(4096, amplitude=1.0, freq=440.0, sample_rate=44100.0)
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/sawtooth_440hz.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 White noise
@@ -101,6 +147,13 @@ transform.  A fixed seed gives reproducible output.
    # Same seed → same output
    noise2 = md.white_noise(4096, amplitude=1.0, seed=42)
    assert (noise == noise2).all()
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/white_noise.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
 
 
 Shepard tone

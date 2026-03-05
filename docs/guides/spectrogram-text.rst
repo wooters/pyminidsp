@@ -32,6 +32,15 @@ Example
    # View the spectrogram of `sig` to see "HELLO" spelled out
    # in the frequency domain.
 
+**Listen** — "HELLO" encoded in the spectrogram:
+
+.. raw:: html
+
+   <audio controls style="margin: 0.5em 0;">
+     <source src="../_static/audio/spectrogram_text_hello.wav" type="audio/wav">
+     <em>Your browser does not support the audio element.</em>
+   </audio>
+
 The result sounds like a buzzy chord, but when analysed with a
 spectrogram viewer (1024-point FFT at 16 kHz), the text is clearly
 visible.
