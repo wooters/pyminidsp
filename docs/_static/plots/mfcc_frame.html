@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MFCCs (One Frame, C0 Included)</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <div id="plot"></div>
+  <script>
+    const idx = Array.from({length: 13}, (_, i) => 'C' + i);
+    const vals = [-92.951185,9.8437512,-3.6262953,-26.338616,-2.1957743,-1.9589592,-23.658869,8.0096306,4.5407431,31.603326,-10.176787,-4.9078552,-9.0810222];
+    Plotly.newPlot('plot', [{
+      x: idx, y: vals,
+      type: 'bar',
+      marker: { color: '#059669' },
+      hovertemplate: '%{x}<br>%{y:.4f}<extra></extra>'
+    }], {
+      title: { text: 'MFCCs (One Frame, C0 Included)', font: { size: 13 } },
+      xaxis: { title: 'Coefficient' },
+      yaxis: { title: 'Value' },
+      margin: { t: 35, r: 20, b: 50, l: 60 },
+      height: 360
+    }, { responsive: true });
+  </script>
+</body>
+</html>

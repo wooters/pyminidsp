@@ -86,6 +86,11 @@ Hiding text
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/steg_lsb_diff.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/steg_freq_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Recovering text
 ---------------

@@ -65,6 +65,10 @@ Generating tones
 Each digit is rendered as the sum of its row and column sinusoids at
 amplitude 0.5 (peak combined amplitude = 1.0).
 
+.. raw:: html
+
+   <iframe src="../_static/plots/dtmf_spectrogram.html" style="width:100%;max-width:800px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
+
 
 Detecting tones
 ---------------

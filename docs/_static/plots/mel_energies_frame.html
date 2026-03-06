@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mel Energies (One Frame Example)</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <div id="plot"></div>
+  <script>
+    const centers = [53.136333,108.54273,168.29262,232.57051,301.44129,375.3778,454.82132,540.13107,631.71328,730.12192,835.85913,949.30183,1071.0935,1201.9554,1342.479,1493.3658,1655.3991,1829.4173,2016.3075,2216.9576,2432.4501,2663.8715,2912.3973,3179.2708,3465.8528,3773.6014];
+    const energies = [8.0350657e-12,3.5042292e-11,1.3056149e-10,5.6809914e-10,4.9149413e-09,7.6283877,39.365675,2.6318375e-07,1.6962423e-09,3.0690917e-10,6.5538983e-10,2.1483097,1.6879403,2.9652081e-10,2.1945023e-11,5.3771533e-12,1.9715564e-12,8.9874632e-13,4.9926934e-13,4.226469e-13,1.0126853e-12,2.1052877e-11,0.62170225,0.33736025,4.6882645e-12,3.8197182e-13];
+    Plotly.newPlot('plot', [{
+      x: centers, y: energies,
+      type: 'bar',
+      marker: { color: '#2563eb' },
+      hovertemplate: 'Center: %{x:.0f} Hz<br>Energy: %{y:.4f}<extra></extra>'
+    }], {
+      title: { text: 'Mel Energies (One Frame Example)', font: { size: 13 } },
+      xaxis: { title: 'Center Frequency (Hz)' },
+      yaxis: { title: 'Energy' },
+      margin: { t: 35, r: 20, b: 50, l: 60 },
+      height: 360
+    }, { responsive: true });
+  </script>
+</body>
+</html>

@@ -25,6 +25,13 @@ Four window types
    import pyminidsp as md
    win = md.hann_window(256)
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/hann_window_time.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/hann_window_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 **Hamming** — similar to Hanning but with a lower first sidelobe.
 
 .. math::
@@ -34,6 +41,13 @@ Four window types
 .. code-block:: python
 
    win = md.hamming_window(256)
+
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/hamming_window_time.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/hamming_window_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 **Blackman** — strongest sidelobe suppression, widest main lobe.
 
@@ -45,12 +59,26 @@ Four window types
 
    win = md.blackman_window(256)
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/blackman_window_time.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/blackman_window_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 **Rectangular** — all ones (no tapering).  Narrowest main lobe but
 maximum sidelobe leakage.
 
 .. code-block:: python
 
    win = md.rect_window(256)
+
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/rect_window_time.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/rect_window_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Comparison

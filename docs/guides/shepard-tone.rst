@@ -70,6 +70,8 @@ Example
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <iframe src="../_static/plots/shepard_rising_spectrogram.html" style="width:100%;max-width:800px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
+
 **Falling** Shepard tone:
 
 .. raw:: html
@@ -78,6 +80,8 @@ Example
      <source src="../_static/audio/shepard_falling.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <iframe src="../_static/plots/shepard_falling_spectrogram.html" style="width:100%;max-width:800px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
 
 **Static** chord (rate = 0):
 

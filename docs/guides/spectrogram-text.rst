@@ -45,6 +45,10 @@ The result sounds like a buzzy chord, but when analysed with a
 spectrogram viewer (1024-point FFT at 16 kHz), the text is clearly
 visible.
 
+.. raw:: html
+
+   <iframe src="../_static/plots/spectext_hello_spectrogram.html" style="width:100%;max-width:800px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
+
 
 Tips
 ----

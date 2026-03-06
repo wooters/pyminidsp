@@ -24,6 +24,13 @@ More robust for noisy or strongly harmonic signals.
                                 min_freq_hz=80.0, max_freq_hz=400.0)
    print(f"Estimated F0: {f0:.1f} Hz")  # ≈ 200.0
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/pitch_f0_tracks.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/pitch_acf_peak_frame.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 FFT peak-picking method
 -----------------------
@@ -43,6 +50,10 @@ fundamental is weak.
    f0 = md.f0_fft(signal, sample_rate=16000.0,
                    min_freq_hz=80.0, max_freq_hz=400.0)
    print(f"Estimated F0: {f0:.1f} Hz")  # ≈ 200.0
+
+.. raw:: html
+
+   <iframe src="../_static/plots/pitch_fft_peak_frame.html" style="width:100%;max-width:600px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
 
 
 Practical notes

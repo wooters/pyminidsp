@@ -32,6 +32,11 @@ The fundamental test signal — a pure tone at a single frequency:
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/sine_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/sine_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Impulse (Kronecker delta)
 -------------------------
@@ -56,6 +61,11 @@ convolution and has a perfectly flat magnitude spectrum.
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/impulse_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/impulse_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Chirp (swept sine)
 ------------------
@@ -78,6 +88,11 @@ instantaneous frequency traces a straight diagonal in the spectrogram.
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/chirp_linear_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/chirp_linear_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 **Logarithmic chirp** — exponential sweep, spending equal time per
 octave.  Ideal for measuring systems on a log-frequency axis.
 
@@ -93,6 +108,11 @@ octave.  Ideal for measuring systems on a log-frequency axis.
      <source src="../_static/audio/chirp_log.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/chirp_log_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/chirp_log_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Square wave
@@ -113,6 +133,11 @@ decaying as 1/k — a textbook demonstration of the Gibbs phenomenon.
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/square_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/square_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Sawtooth wave
 -------------
@@ -131,6 +156,11 @@ harmonic content than the square wave's odd-only series.
      <source src="../_static/audio/sawtooth_440hz.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/sawtooth_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/sawtooth_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 White noise
@@ -154,6 +184,11 @@ transform.  A fixed seed gives reproducible output.
      <source src="../_static/audio/white_noise.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/white_noise_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/white_noise_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Shepard tone

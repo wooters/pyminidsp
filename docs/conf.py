@@ -45,8 +45,26 @@ def _generate_audio(app):
         print("Audio previews will not be available in the built docs.")
 
 
+def _generate_plots(app):
+    """Generate interactive Plotly HTML plots before the build."""
+    plots_dir = os.path.join(app.srcdir, "_static", "plots")
+    marker = os.path.join(plots_dir, ".generated")
+    if os.path.exists(marker):
+        return
+    try:
+        from gen_signal_plots import generate
+        print("Generating interactive plots for documentation...")
+        generate(plots_dir)
+        with open(marker, "w") as f:
+            f.write("ok\n")
+    except Exception as exc:
+        print(f"Warning: plot generation failed: {exc}")
+        print("Interactive plots will not be available in the built docs.")
+
+
 def setup(app):
     app.connect("builder-inited", _generate_audio)
+    app.connect("builder-inited", _generate_plots)
 
 # -- Autodoc ------------------------------------------------------------------
 autodoc_mock_imports = ["pyminidsp._minidsp_cffi"]

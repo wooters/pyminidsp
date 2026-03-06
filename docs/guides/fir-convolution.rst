@@ -22,6 +22,13 @@ linear convolution.  Output length is ``N + M - 1``.
    # out[:3] == [1.0, 2.0, 3.0]
    # len(out) == 102
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/conv_time_response.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/conv_time_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Moving-average filter
 ---------------------
@@ -33,6 +40,13 @@ Output matches input length with zero-padded startup.
 
    signal = md.sine_wave(1024, freq=440.0, sample_rate=44100.0)
    smoothed = md.moving_average(signal, window_len=5)
+
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/moving_average_response.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/moving_average_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 General FIR filter
@@ -51,6 +65,13 @@ Output matches input length.
    coeffs = np.array([0.25, 0.5, 0.25])
    filtered = md.fir_filter(signal, coeffs)
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/fir_general_response.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/fir_general_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 FFT overlap-add
 ---------------
@@ -64,6 +85,13 @@ kernels** by processing blocks in the frequency domain.
    out_time = md.convolution_time(signal, kernel)
    out_fft = md.convolution_fft_ola(signal, kernel)
    np.testing.assert_allclose(out_time, out_fft, atol=1e-10)
+
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/conv_fft_ola_response.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/conv_fft_ola_spectrum.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Comparison

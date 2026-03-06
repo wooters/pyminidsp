@@ -34,6 +34,15 @@ Building a mel filterbank
    fb = md.mel_filterbank(512, sample_rate=16000.0, num_mels=26)
    # fb.shape == (26, 257)  — 26 triangular filters over 257 FFT bins
 
+.. raw:: html
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/mel_input_waveform.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/mel_input_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
+   <iframe src="../_static/plots/mel_filterbank_shapes.html" style="width:100%;max-width:800px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
+
 
 Computing mel energies
 ----------------------
@@ -45,6 +54,10 @@ From a single frame:
    signal = md.sine_wave(512, freq=440.0, sample_rate=16000.0)
    mel = md.mel_energies(signal, sample_rate=16000.0, num_mels=26)
    # mel.shape == (26,)
+
+.. raw:: html
+
+   <iframe src="../_static/plots/mel_energies_frame.html" style="width:100%;max-width:600px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
 
 Processing steps (internally):
 
@@ -60,6 +73,10 @@ Computing MFCCs
 
    coeffs = md.mfcc(signal, sample_rate=16000.0, num_mels=26, num_coeffs=13)
    # coeffs.shape == (13,)
+
+.. raw:: html
+
+   <iframe src="../_static/plots/mfcc_frame.html" style="width:100%;max-width:600px;height:380px;border:1px solid #ddd;border-radius:4px;margin:1em 0;" frameborder="0"></iframe>
 
 Conventions:
 

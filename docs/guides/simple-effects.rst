@@ -41,6 +41,11 @@ geometrically:
      <em>Your browser does not support the audio element.</em>
    </audio>
 
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/effect_delay_before_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/effect_delay_after_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
+
 
 Tremolo
 -------
@@ -73,6 +78,11 @@ Amplitude modulation by a sinusoidal LFO.  The gain oscillates between
      <source src="../_static/audio/effect_tremolo_after.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/effect_tremolo_before_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/effect_tremolo_after_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Comb-filter reverb
@@ -108,6 +118,11 @@ that simulate reverberation:
      <source src="../_static/audio/effect_comb_after.wav" type="audio/wav">
      <em>Your browser does not support the audio element.</em>
    </audio>
+
+   <div style="display:flex;gap:0.75rem;margin:1em 0;flex-wrap:wrap;">
+     <iframe src="../_static/plots/effect_comb_before_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+     <iframe src="../_static/plots/effect_comb_after_spectrogram.html" style="flex:1;min-width:280px;height:380px;border:1px solid #ddd;border-radius:4px;" frameborder="0"></iframe>
+   </div>
 
 
 Verification tips

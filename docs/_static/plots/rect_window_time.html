@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Rectangular Window - Time Domain</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #fafafa; }
+  </style>
+</head>
+<body>
+  <div id="plot"></div>
+  <script>
+    const idx = Array.from({length: 256}, (_, i) => i);
+    const w = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
+    Plotly.newPlot('plot', [{
+      x: idx, y: w,
+      type: 'scatter', mode: 'lines',
+      line: { color: '#2563eb', width: 1.4 },
+      hovertemplate: 'n=%{x}<br>w[n]=%{y:.6f}<extra></extra>'
+    }], {
+      title: { text: 'Rectangular Window - Time Domain', font: { size: 13 } },
+      xaxis: { title: 'Sample Index (n)', range: [0, 255] },
+      yaxis: { title: 'Amplitude', range: [-0.05, 1.05] },
+      margin: { t: 35, r: 20, b: 50, l: 60 },
+      height: 360
+    }, { responsive: true });
+  </script>
+</body>
+</html>
