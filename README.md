@@ -1,5 +1,7 @@
 # pyminidsp
 
+**[Documentation](https://wooters.github.io/pyminidsp/)**
+
 Python bindings to the [miniDSP](https://github.com/wooters/miniDSP) C library.
 
 A comprehensive DSP toolkit providing signal generation, spectral analysis,
