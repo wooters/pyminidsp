@@ -28,8 +28,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: astral-sh/setup-uv@v4
+
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.21.*
+        run: uv pip install --system cibuildwheel==2.21.*
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
@@ -46,6 +48,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: astral-sh/setup-uv@v4
+
       - name: Install build deps
         run: |
           sudo apt-get update && sudo apt-get install -y libfftw3-dev
@@ -54,7 +58,7 @@ jobs:
       - name: Build sdist
         env:
           MINIDSP_SRC: /tmp/miniDSP
-        run: pipx run build --sdist
+        run: uv build --sdist
 
       - uses: actions/upload-artifact@v4
         with:

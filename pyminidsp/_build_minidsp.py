@@ -242,7 +242,7 @@ _core_sources = [
     "src/biquad.c",
 ]
 
-_source_paths = [os.path.join(_minidsp_src, s) for s in _core_sources]
+_source_paths = [os.path.relpath(os.path.join(_minidsp_src, s)) for s in _core_sources]
 
 # Detect Homebrew prefix on macOS
 _extra_include = []
@@ -263,7 +263,7 @@ ffibuilder.set_source(
     #include "biquad.h"
     """,
     sources=_source_paths,
-    include_dirs=[os.path.join(_minidsp_src, "include")] + _extra_include,
+    include_dirs=[os.path.relpath(os.path.join(_minidsp_src, "include"))] + _extra_include,
     library_dirs=_extra_lib,
     libraries=["fftw3", "m"],
     extra_compile_args=["-std=c2x", "-O2"],

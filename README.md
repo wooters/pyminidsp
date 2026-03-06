@@ -19,16 +19,17 @@ filtering, effects, and more. All functions accept and return NumPy arrays.
 # Clone the miniDSP C library (if not already present)
 git clone https://github.com/wooters/miniDSP.git
 
+# Create virtual environment (uses .python-version for Python version)
+uv venv
+
 # Install pyminidsp (set MINIDSP_SRC to point to the C library)
-MINIDSP_SRC=./miniDSP pip install .
+MINIDSP_SRC=./miniDSP uv sync
 ```
 
 Or for development:
 
 ```bash
-pip install cffi numpy
-MINIDSP_SRC=./miniDSP python pyminidsp/_build_minidsp.py
-pip install -e ".[dev]"
+MINIDSP_SRC=./miniDSP uv sync --extra dev
 ```
 
 ## Quick Start
@@ -139,8 +140,7 @@ md.shutdown()
 ## Running Tests
 
 ```bash
-pip install pytest
-python -m pytest tests/ -v
+uv run pytest tests/ -v
 ```
 
 ## License
