@@ -3,3 +3,4 @@ include README.md
 include pyproject.toml
 include setup.py
 recursive-include pyminidsp *.py
+recursive-include vendor/miniDSP *.c *.h

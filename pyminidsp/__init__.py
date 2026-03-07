@@ -53,7 +53,12 @@ from pyminidsp._core import (
     GCC_SIMP, GCC_PHAT,
 )
 
-__version__ = "0.1.0"
+from importlib.metadata import version as _version, PackageNotFoundError as _PNF
+
+try:
+    __version__ = _version("pyminidsp")
+except _PNF:
+    __version__ = "0.0.0"  # not installed via pip (e.g. editable dev checkout)
 __all__ = [
     # Signal measurement
     "dot", "entropy", "energy", "power", "power_db",

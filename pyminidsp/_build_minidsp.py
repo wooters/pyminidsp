@@ -201,10 +201,15 @@ ffibuilder.cdef("""
 
 # Locate the miniDSP source directory
 _this_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_this_dir)
 
-# Look for the miniDSP source in common locations
+# Look for the miniDSP source in priority order:
+# 1. MINIDSP_SRC env var (explicit override)
+# 2. vendor/miniDSP/ (bundled in sdist for PyPI installs)
+# 3. Adjacent miniDSP/ dirs and /tmp (dev convenience)
 _search_paths = [
     os.environ.get("MINIDSP_SRC", ""),
+    os.path.join(_project_root, "vendor", "miniDSP"),
     os.path.join(_this_dir, "..", "miniDSP"),
     os.path.join(_this_dir, "..", "..", "miniDSP"),
     "/tmp/miniDSP",
@@ -217,14 +222,15 @@ for p in _search_paths:
         break
 
 if _minidsp_src is None:
-    # Try cloning the repo
-    _minidsp_src = os.path.join(_this_dir, "..", "miniDSP")
-    print("miniDSP source not found, cloning from GitHub...")
-    subprocess.check_call(
-        ["git", "clone", "--depth", "1",
-         "https://github.com/wooters/miniDSP.git", _minidsp_src],
-        stdout=sys.stderr,
+    print(
+        "ERROR: miniDSP C source not found.\n"
+        "Provide it via one of:\n"
+        "  1. Set MINIDSP_SRC env var: MINIDSP_SRC=/path/to/miniDSP pip install .\n"
+        "  2. Place it at vendor/miniDSP/ relative to the project root\n"
+        "  3. Clone it adjacent to this repo: git clone https://github.com/wooters/miniDSP.git",
+        file=sys.stderr,
     )
+    sys.exit(1)
 
 print(f"Using miniDSP source from: {_minidsp_src}")
 
