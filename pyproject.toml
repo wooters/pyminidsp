@@ -74,10 +74,12 @@ before-all = [
 [tool.cibuildwheel.environment]
 MINIDSP_SRC = "/tmp/miniDSP"
 
-# --- Linux (manylinux) ---
+# --- Linux (manylinux_2_28 — AlmaLinux 8, GCC 12+, needed for C23) ---
 [tool.cibuildwheel.linux]
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
 before-all = [
-    "yum install -y fftw-devel || (apt-get update && apt-get install -y libfftw3-dev)",
+    "dnf install -y fftw-devel || (apt-get update && apt-get install -y libfftw3-dev)",
     "git clone --depth 1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
 ]
 
