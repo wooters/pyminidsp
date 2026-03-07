@@ -84,7 +84,9 @@ before-all = [
 ]
 
 # --- macOS ---
+# Homebrew's fftw targets the runner's OS (macOS 15), so the wheel must match
 [tool.cibuildwheel.macos]
+environment = { MACOSX_DEPLOYMENT_TARGET = "15.0", MINIDSP_SRC = "/tmp/miniDSP" }
 before-all = [
     "brew install fftw",
     "git clone --depth 1 --branch v0.1.0 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
