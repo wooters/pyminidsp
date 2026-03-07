@@ -272,7 +272,7 @@ ffibuilder.set_source(
     include_dirs=[os.path.relpath(os.path.join(_minidsp_src, "include"))] + _extra_include,
     library_dirs=_extra_lib,
     libraries=["fftw3", "m"],
-    extra_compile_args=["-std=c2x", "-O2"],
+    extra_compile_args=["-std=c17", "-O2"],
 )
 
 if __name__ == "__main__":

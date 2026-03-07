@@ -53,7 +53,7 @@ jobs:
       - name: Install build deps
         run: |
           sudo apt-get update && sudo apt-get install -y libfftw3-dev
-          git clone --depth 1 https://github.com/wooters/miniDSP.git /tmp/miniDSP
+          git clone --depth 1 --branch v0.1.0 https://github.com/wooters/miniDSP.git /tmp/miniDSP
 
       - name: Bundle C source into vendor/
         run: mkdir -p vendor && cp -r /tmp/miniDSP vendor/miniDSP
