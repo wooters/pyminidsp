@@ -142,7 +142,7 @@ md.shutdown()
 ## Running Tests
 
 ```bash
-uv run pytest tests/ -v
+MINIDSP_SRC=./miniDSP uv run pytest tests/ -v
 ```
 
 ## License
