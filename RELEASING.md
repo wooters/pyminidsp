@@ -36,8 +36,11 @@ git push origin v0.2.0rc1
 CI will build wheels + sdist and publish to TestPyPI. Verify the package installs correctly:
 
 ```bash
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pyminidsp==0.2.0rc1
-python -c "import pyminidsp; print(pyminidsp.__version__)"
+uv run --no-project \
+  --with pyminidsp==0.2.0rc1 \
+  --index-url https://test.pypi.org/simple/ \
+  --extra-index-url https://pypi.org/simple/ \
+  python -c "import pyminidsp; print(pyminidsp.__version__)"
 ```
 
 The `--extra-index-url` is needed so that dependencies (numpy, cffi) resolve from production PyPI.
@@ -56,8 +59,8 @@ CI will build and publish to PyPI automatically.
 ### 4. Verify
 
 ```bash
-pip install pyminidsp==0.2.0
-python -c "import pyminidsp; print(pyminidsp.__version__)"
+uv run --no-project --with pyminidsp==0.2.0 \
+  python -c "import pyminidsp; print(pyminidsp.__version__)"
 ```
 
 Check the release page at https://pypi.org/project/pyminidsp/
@@ -68,5 +71,9 @@ Check the release page at https://pypi.org/project/pyminidsp/
 |------------|-------------|
 | `v1.2.3` | Production PyPI |
 | `v1.2.3rc1` | TestPyPI |
-| `v1.2.3a1` | TestPyPI |
-| `v1.2.3b1` | TestPyPI |
+| `v1.2.3alpha1` | TestPyPI |
+| `v1.2.3beta1` | TestPyPI |
+
+**Note:** The workflow uses `contains()` substring matching on tag names. Single-letter
+suffixes like `a1`/`b1` are **not** supported — they match normal version strings
+(e.g., `v0.2.0` contains `b`). Always use the full words `alpha`/`beta`.
