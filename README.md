@@ -7,28 +7,40 @@ Python bindings to the [miniDSP](https://github.com/wooters/miniDSP) C library.
 A comprehensive DSP toolkit providing signal generation, spectral analysis,
 filtering, effects, and more. All functions accept and return NumPy arrays.
 
-## Prerequisites
+## Installation
 
-- Python >= 3.9
+```bash
+pip install pyminidsp
+```
+
+Pre-built wheels are available for:
+
+- **Linux** x86-64
+- **macOS** ARM64 (Apple Silicon)
+- Python 3.9, 3.10, 3.11, 3.12, 3.13
+
+### Building from Source
+
+If you need to build from source (e.g. unsupported platform or development):
+
+**Prerequisites:**
 - [FFTW3](http://www.fftw.org/) development headers
   - Ubuntu/Debian: `sudo apt install libfftw3-dev`
   - macOS: `brew install fftw`
 - A C compiler (gcc or clang)
 
-## Installation
-
 ```bash
-# Clone the miniDSP C library (if not already present)
+# Clone the miniDSP C library
 git clone https://github.com/wooters/miniDSP.git
 
-# Create virtual environment (uses .python-version for Python version)
+# Create virtual environment
 uv venv
 
 # Install pyminidsp (set MINIDSP_SRC to point to the C library)
 MINIDSP_SRC=./miniDSP uv sync
 ```
 
-Or for development:
+For development (includes test dependencies):
 
 ```bash
 MINIDSP_SRC=./miniDSP uv sync --extra dev
@@ -79,22 +91,49 @@ md.shutdown()
 | `power_spectral_density(signal)` | Periodogram PSD estimate |
 | `phase_spectrum(signal)` | Phase spectrum in radians |
 | `stft(signal, n, hop)` | Short-Time Fourier Transform |
+| `stft_num_frames(signal_len, n, hop)` | Number of STFT frames |
 | `mel_filterbank(n, sample_rate, num_mels)` | Mel-spaced triangular filterbank |
 | `mel_energies(signal, sample_rate, num_mels)` | Mel-band energies |
 | `mfcc(signal, sample_rate, num_mels, num_coeffs)` | Mel-frequency cepstral coefficients |
+
+### Window Functions
+
+| Function | Description |
+|----------|-------------|
+| `hann_window(n)` | Hann window |
+| `hamming_window(n)` | Hamming window |
+| `blackman_window(n)` | Blackman window |
+| `rect_window(n)` | Rectangular window |
+
+### Signal Measurement
+
+| Function | Description |
+|----------|-------------|
+| `dot(a, b)` | Dot product of two vectors |
+| `entropy(signal)` | Normalised entropy of a distribution |
+| `energy(signal)` | Signal energy |
+| `power(signal)` / `power_db(signal)` | Signal power (linear / dB) |
+| `rms(signal)` | Root mean square |
 
 ### Signal Analysis
 
 | Function | Description |
 |----------|-------------|
-| `rms(signal)` | Root mean square |
-| `energy(signal)` | Signal energy |
-| `power(signal)` / `power_db(signal)` | Signal power (linear / dB) |
 | `zero_crossing_rate(signal)` | Zero-crossing rate |
 | `autocorrelation(signal, max_lag)` | Normalised autocorrelation |
 | `peak_detect(signal, threshold, min_distance)` | Local maxima detection |
 | `f0_autocorrelation(signal, sample_rate, min_freq, max_freq)` | F0 via autocorrelation |
 | `f0_fft(signal, sample_rate, min_freq, max_freq)` | F0 via FFT peak picking |
+| `mix(signal_a, signal_b, weight_a, weight_b)` | Weighted sum of two signals |
+
+### Signal Scaling
+
+| Function | Description |
+|----------|-------------|
+| `scale(value, old_min, old_max, new_min, new_max)` | Map a value from one range to another |
+| `scale_vec(signal, old_min, old_max, new_min, new_max)` | Map vector elements between ranges |
+| `fit_within_range(signal, new_min, new_max)` | Fit signal values within a range |
+| `adjust_dblevel(signal, target_db)` | Automatic gain control |
 
 ### Effects & Filters
 
@@ -105,6 +144,7 @@ md.shutdown()
 | `comb_reverb(signal, delay_samples, feedback, dry, wet)` | Comb-filter reverb |
 | `convolution_time(signal, kernel)` | Time-domain convolution |
 | `convolution_fft_ola(signal, kernel)` | FFT overlap-add convolution |
+| `convolution_num_samples(signal_len, kernel_len)` | Output length of linear convolution |
 | `moving_average(signal, window_len)` | Moving average filter |
 | `fir_filter(signal, coeffs)` | FIR filter |
 | `BiquadFilter(type, freq, sample_rate)` | IIR biquad filter (LPF/HPF/BPF/etc.) |
@@ -115,12 +155,14 @@ md.shutdown()
 |----------|-------------|
 | `dtmf_generate(digits, sample_rate, tone_ms, pause_ms)` | Generate DTMF tones |
 | `dtmf_detect(signal, sample_rate)` | Detect DTMF digits |
+| `dtmf_signal_length(num_digits, sample_rate, tone_ms, pause_ms)` | Calculate samples needed for DTMF |
 
 ### Delay Estimation (GCC-PHAT)
 
 | Function | Description |
 |----------|-------------|
 | `get_delay(sig_a, sig_b, margin, weighting)` | Delay between two signals |
+| `get_multiple_delays(signals, margin, weighting)` | Delays from reference to M-1 signals |
 | `gcc(sig_a, sig_b, weighting)` | Full cross-correlation |
 
 ### Audio Steganography
@@ -132,12 +174,22 @@ md.shutdown()
 | `steg_encode_bytes(host, data, sample_rate, method)` | Hide binary data |
 | `steg_decode_bytes(stego, sample_rate, method)` | Recover binary data |
 | `steg_detect(signal, sample_rate)` | Detect steganography method |
+| `steg_capacity(host, sample_rate, method)` | Maximum message length |
 
 ### Spectrogram Art
 
 | Function | Description |
 |----------|-------------|
 | `spectrogram_text(text, freq_lo, freq_hi, duration, sample_rate)` | Text visible in spectrogram |
+
+### Constants
+
+| Constant | Description |
+|----------|-------------|
+| `LPF`, `HPF`, `BPF`, `NOTCH`, `PEQ`, `LSH`, `HSH` | Biquad filter types |
+| `STEG_LSB`, `STEG_FREQ_BAND` | Steganography methods |
+| `STEG_TYPE_TEXT`, `STEG_TYPE_BINARY` | Steganography payload types |
+| `GCC_SIMP`, `GCC_PHAT` | GCC weighting modes |
 
 ## Running Tests
 
