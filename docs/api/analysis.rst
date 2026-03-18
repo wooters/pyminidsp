@@ -39,7 +39,7 @@ detecting features, and estimating pitch.
       \mathrm{RMS} = \sqrt{\frac{1}{N}\sum_{n=0}^{N-1} x[n]^2}
 
    Equivalently, ``sqrt(power(a))``.  A unit-amplitude sine wave has
-   RMS ≈ 0.707.  A DC signal of value *c* has RMS = |c|.
+   RMS ≈ 0.707.  A DC signal of value *c* has RMS = :math:`|c|`.
 
    .. code-block:: python
 

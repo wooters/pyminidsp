@@ -36,7 +36,7 @@ def magnitude_spectrum(signal):
     Compute the magnitude spectrum of a real-valued signal.
 
     Returns:
-        numpy array of length N/2 + 1 containing |X(k)|.
+        numpy array of length N/2 + 1 containing magnitudes.
     """
     s_ptr, signal = _as_double_ptr(signal)
     n = len(signal)
@@ -51,7 +51,7 @@ def power_spectral_density(signal):
     Compute the power spectral density (PSD) of a signal.
 
     Returns:
-        numpy array of length N/2 + 1 containing |X(k)|^2 / N.
+        numpy array of length N/2 + 1 containing power values.
     """
     s_ptr, signal = _as_double_ptr(signal)
     n = len(signal)

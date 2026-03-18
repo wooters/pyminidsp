@@ -1,5 +1,5 @@
 Basic Signal Operations
-======================
+=======================
 
 Five fundamental time-domain analysis techniques that work alongside
 :func:`~pyminidsp.energy`, :func:`~pyminidsp.power`, and
@@ -15,7 +15,7 @@ The standard measure of signal "loudness":
 
    \text{RMS} = \sqrt{\frac{1}{N}\sum_{n=0}^{N-1} x[n]^2}
 
-A unit sine wave yields ≈ 0.707; a DC signal of value *c* has RMS = |c|.
+A unit sine wave yields ≈ 0.707; a DC signal of value *c* has RMS = :math:`|c|`.
 
 .. code-block:: python
 

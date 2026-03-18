@@ -11,7 +11,7 @@ def delay_echo(signal, delay_samples, feedback=0.5, dry=1.0, wet=0.5):
     Args:
         signal: Input signal.
         delay_samples: Delay length in samples.
-        feedback: Echo feedback gain (|feedback| < 1).
+        feedback: Echo feedback gain (abs(feedback) < 1).
         dry: Dry mix weight.
         wet: Wet mix weight.
 
@@ -52,7 +52,7 @@ def comb_reverb(signal, delay_samples, feedback=0.5, dry=1.0, wet=0.3):
     Args:
         signal: Input signal.
         delay_samples: Comb delay in samples.
-        feedback: Feedback gain (|feedback| < 1).
+        feedback: Feedback gain (abs(feedback) < 1).
         dry: Dry mix weight.
         wet: Wet mix weight.
 
