@@ -85,5 +85,10 @@ intersphinx_mapping = {
 
 # -- HTML output --------------------------------------------------------------
 html_theme = "furo"
+html_theme_options = {
+    "source_repository": "https://github.com/wooters/pyminidsp",
+    "source_branch": "main",
+    "source_directory": "docs/",
+}
 html_static_path = ["_static"]
 html_title = "pyminidsp"
