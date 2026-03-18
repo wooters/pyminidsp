@@ -9,15 +9,14 @@ filtering, effects, and more. All functions accept and return NumPy arrays.
 
 ## Installation
 
+Pre-built wheels are available for **Linux** x86-64 and **macOS** ARM64
+(Apple Silicon), with Python 3.9–3.13. Wheels include the compiled C
+extension (no compiler needed), but [FFTW3](http://www.fftw.org/) must be
+installed on your system (`apt install libfftw3-3` or `brew install fftw`).
+
 ```bash
 pip install pyminidsp
 ```
-
-Pre-built wheels are available for:
-
-- **Linux** x86-64
-- **macOS** ARM64 (Apple Silicon)
-- Python 3.9, 3.10, 3.11, 3.12, 3.13
 
 ### Building from Source
 

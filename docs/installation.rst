@@ -1,22 +1,21 @@
 Installation
 ============
 
-Prerequisites
--------------
+Installing from PyPI (pre-built wheels)
+---------------------------------------
 
-- Python >= 3.9
-- `FFTW3 <http://www.fftw.org/>`_ development headers
-- A C compiler (gcc or clang)
+Pre-built wheels are available for **Linux** x86-64 and **macOS** ARM64
+(Apple Silicon), with Python 3.9–3.13. Wheels include the compiled C
+extension, so no C compiler is needed. However, the FFTW3 runtime library
+must be installed on your system.
 
-Install FFTW3 for your platform:
-
-.. tab-set-directive is not used here for simplicity
+Install FFTW3:
 
 **Ubuntu / Debian**
 
 .. code-block:: bash
 
-   sudo apt install libfftw3-dev
+   sudo apt install libfftw3-3
 
 **macOS (Homebrew)**
 
@@ -28,22 +27,26 @@ Install FFTW3 for your platform:
 
 .. code-block:: bash
 
-   sudo dnf install fftw-devel
+   sudo dnf install fftw-libs
 
-
-Installing from PyPI (pre-built wheels)
----------------------------------------
+Then install pyminidsp:
 
 .. code-block:: bash
 
    pip install pyminidsp
 
-Pre-built wheels include the compiled C extension and bundled FFTW3 library,
-so no C compiler or FFTW3 headers are needed.
 
+Building from source
+--------------------
 
-Installing from source
-----------------------
+If you need to build from source (e.g. unsupported platform or development),
+you will need the following **in addition to** the FFTW3 runtime library above:
+
+- `FFTW3 <http://www.fftw.org/>`_ **development headers**
+  (Ubuntu/Debian: ``libfftw3-dev``, Fedora/RHEL: ``fftw-devel``,
+  macOS: included with ``brew install fftw``)
+- A C compiler (gcc or clang)
+- The `miniDSP <https://github.com/wooters/miniDSP>`_ C library source
 
 .. code-block:: bash
 
