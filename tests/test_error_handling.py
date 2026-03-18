@@ -2,6 +2,7 @@
 
 import threading
 
+import numpy as np
 import pytest
 
 import pyminidsp as md
@@ -99,3 +100,43 @@ class TestThreadSafety:
 
         assert results["err"] == 3
         assert results["clean"] == "ok"
+
+
+class TestRealCErrors:
+    """Integration tests that trigger actual C-level error handler callbacks."""
+
+    def test_invalid_size_empty_array(self):
+        """MD_rms checks N > 0; empty array triggers MD_ERR_INVALID_SIZE."""
+        with pytest.raises(MiniDSPError) as exc_info:
+            md.rms(np.array([], dtype=np.float64))
+        assert exc_info.value.code == md.ERR_INVALID_SIZE
+        assert exc_info.value.func_name != ""
+        assert exc_info.value.message != ""
+
+    def test_invalid_range_scale_vec(self):
+        """MD_scale_vec checks oldmin < oldmax; equal values trigger MD_ERR_INVALID_RANGE."""
+        with pytest.raises(MiniDSPError) as exc_info:
+            md.scale_vec(np.array([1.0, 2.0]), oldmin=5.0, oldmax=5.0, newmin=0.0, newmax=1.0)
+        assert exc_info.value.code == md.ERR_INVALID_RANGE
+
+    def test_invalid_range_autocorrelation(self):
+        """MD_autocorrelation checks max_lag in (0, N); max_lag >= N triggers error."""
+        signal = np.ones(10, dtype=np.float64)
+        with pytest.raises(MiniDSPError) as exc_info:
+            md.autocorrelation(signal, max_lag=10)
+        assert exc_info.value.code == md.ERR_INVALID_RANGE
+
+    def test_invalid_range_tremolo_depth(self):
+        """MD_tremolo checks depth in [0, 1]; depth > 1 triggers MD_ERR_INVALID_RANGE."""
+        signal = np.ones(100, dtype=np.float64)
+        with pytest.raises(MiniDSPError) as exc_info:
+            md.tremolo(signal, rate_hz=5.0, depth=2.0)
+        assert exc_info.value.code == md.ERR_INVALID_RANGE
+
+    def test_recovery_after_real_error(self):
+        """After a real C error, subsequent valid calls succeed."""
+        with pytest.raises(MiniDSPError):
+            md.rms(np.array([], dtype=np.float64))
+        # Valid call should work fine
+        result = md.rms(np.array([1.0, 2.0, 3.0]))
+        assert result > 0

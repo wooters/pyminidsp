@@ -1,5 +1,29 @@
-Constants
-=========
+Constants & Exceptions
+======================
+
+Error handling
+--------------
+
+.. autoclass:: pyminidsp.MiniDSPError
+   :members:
+   :show-inheritance:
+
+.. data:: pyminidsp.ERR_NULL_POINTER
+
+   A required pointer argument was NULL (1).
+
+.. data:: pyminidsp.ERR_INVALID_SIZE
+
+   An array length or count was zero or otherwise invalid (2).
+
+.. data:: pyminidsp.ERR_INVALID_RANGE
+
+   A numeric argument was outside the valid range (3).
+
+.. data:: pyminidsp.ERR_ALLOC_FAILED
+
+   A memory allocation (malloc/calloc) failed (4).
+
 
 Filter types
 ------------
