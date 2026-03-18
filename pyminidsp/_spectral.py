@@ -1,6 +1,9 @@
 """FFT-based spectrum analysis, STFT, mel filterbanks, MFCCs, and window functions."""
 
+from __future__ import annotations
+
 import numpy as np
+import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
@@ -10,7 +13,7 @@ from pyminidsp._helpers import _as_double_ptr, _new_double_array
 # FFT / Spectrum analysis
 # ---------------------------------------------------------------------------
 
-def lowpass_brickwall(signal, cutoff_hz, sample_rate):
+def lowpass_brickwall(signal: npt.ArrayLike, cutoff_hz: float, sample_rate: float) -> npt.NDArray[np.float64]:
     """
     Apply an FFT-based ideal (brickwall) lowpass filter.
 
@@ -31,7 +34,7 @@ def lowpass_brickwall(signal, cutoff_hz, sample_rate):
     lib.MD_lowpass_brickwall(out_ptr, len(out), float(cutoff_hz), float(sample_rate))
     return out
 
-def magnitude_spectrum(signal):
+def magnitude_spectrum(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Compute the magnitude spectrum of a real-valued signal.
 
@@ -46,7 +49,7 @@ def magnitude_spectrum(signal):
     return out
 
 
-def power_spectral_density(signal):
+def power_spectral_density(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Compute the power spectral density (PSD) of a signal.
 
@@ -61,7 +64,7 @@ def power_spectral_density(signal):
     return out
 
 
-def phase_spectrum(signal):
+def phase_spectrum(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Compute the one-sided phase spectrum in radians.
 
@@ -76,12 +79,12 @@ def phase_spectrum(signal):
     return out
 
 
-def stft_num_frames(signal_len, n, hop):
+def stft_num_frames(signal_len: int, n: int, hop: int) -> int:
     """Compute the number of STFT frames."""
     return lib.MD_stft_num_frames(signal_len, n, hop)
 
 
-def stft(signal, n, hop):
+def stft(signal: npt.ArrayLike, n: int, hop: int) -> npt.NDArray[np.float64]:
     """
     Compute the Short-Time Fourier Transform (STFT).
 
@@ -102,7 +105,7 @@ def stft(signal, n, hop):
     return out.reshape(num_frames, num_bins)
 
 
-def mel_filterbank(n, sample_rate, num_mels=26, min_freq_hz=0.0, max_freq_hz=None):
+def mel_filterbank(n: int, sample_rate: float, num_mels: int = 26, min_freq_hz: float = 0.0, max_freq_hz: float | None = None) -> npt.NDArray[np.float64]:
     """
     Build a mel-spaced triangular filterbank matrix.
 
@@ -124,7 +127,7 @@ def mel_filterbank(n, sample_rate, num_mels=26, min_freq_hz=0.0, max_freq_hz=Non
     return out.reshape(num_mels, num_bins)
 
 
-def mel_energies(signal, sample_rate, num_mels=26, min_freq_hz=0.0, max_freq_hz=None):
+def mel_energies(signal: npt.ArrayLike, sample_rate: float, num_mels: int = 26, min_freq_hz: float = 0.0, max_freq_hz: float | None = None) -> npt.NDArray[np.float64]:
     """
     Compute mel-band energies from a single frame.
 
@@ -140,8 +143,8 @@ def mel_energies(signal, sample_rate, num_mels=26, min_freq_hz=0.0, max_freq_hz=
     return out
 
 
-def mfcc(signal, sample_rate, num_mels=26, num_coeffs=13,
-         min_freq_hz=0.0, max_freq_hz=None):
+def mfcc(signal: npt.ArrayLike, sample_rate: float, num_mels: int = 26, num_coeffs: int = 13,
+         min_freq_hz: float = 0.0, max_freq_hz: float | None = None) -> npt.NDArray[np.float64]:
     """
     Compute MFCCs from a single frame.
 
@@ -170,35 +173,35 @@ def mfcc(signal, sample_rate, num_mels=26, num_coeffs=13,
 # Window generation
 # ---------------------------------------------------------------------------
 
-def hann_window(n):
+def hann_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Hanning (Hann) window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Hann_Win(out_ptr, n)
     return out
 
 
-def hamming_window(n):
+def hamming_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Hamming window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Hamming_Win(out_ptr, n)
     return out
 
 
-def blackman_window(n):
+def blackman_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Blackman window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Blackman_Win(out_ptr, n)
     return out
 
 
-def rect_window(n):
+def rect_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a rectangular window of length n (all ones)."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Rect_Win(out_ptr, n)
     return out
 
 
-def kaiser_window(n, beta):
+def kaiser_window(n: int, beta: float) -> npt.NDArray[np.float64]:
     """
     Generate a Kaiser window of length n with shape parameter beta.
 

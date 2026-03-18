@@ -1,6 +1,9 @@
 """Signal measurement, analysis, and scaling functions."""
 
+from __future__ import annotations
+
 import numpy as np
+import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
@@ -9,7 +12,7 @@ from pyminidsp._helpers import _as_double_ptr, _new_double_array
 # Signal measurement
 # ---------------------------------------------------------------------------
 
-def dot(a, b):
+def dot(a: npt.ArrayLike, b: npt.ArrayLike) -> float:
     """Compute the dot product of two vectors."""
     a_ptr, a = _as_double_ptr(a)
     b_ptr, b = _as_double_ptr(b)
@@ -17,25 +20,25 @@ def dot(a, b):
     return lib.MD_dot(a_ptr, b_ptr, n)
 
 
-def entropy(a, clip=False):
+def entropy(a: npt.ArrayLike, clip: bool = False) -> float:
     """Compute the normalized entropy of a distribution."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_entropy(a_ptr, len(a), clip)
 
 
-def energy(a):
+def energy(a: npt.ArrayLike) -> float:
     """Compute signal energy: sum of squared samples."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_energy(a_ptr, len(a))
 
 
-def power(a):
+def power(a: npt.ArrayLike) -> float:
     """Compute signal power: energy / N."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_power(a_ptr, len(a))
 
 
-def power_db(a):
+def power_db(a: npt.ArrayLike) -> float:
     """Compute signal power in decibels."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_power_db(a_ptr, len(a))
@@ -45,12 +48,12 @@ def power_db(a):
 # Math utilities
 # ---------------------------------------------------------------------------
 
-def bessel_i0(x):
+def bessel_i0(x: float) -> float:
     """Compute the zeroth-order modified Bessel function of the first kind."""
     return lib.MD_bessel_i0(float(x))
 
 
-def sinc(x):
+def sinc(x: float) -> float:
     """Compute the normalized sinc function: sin(pi*x) / (pi*x), with sinc(0) = 1."""
     return lib.MD_sinc(float(x))
 
@@ -59,19 +62,19 @@ def sinc(x):
 # Signal analysis
 # ---------------------------------------------------------------------------
 
-def rms(a):
+def rms(a: npt.ArrayLike) -> float:
     """Compute the root mean square (RMS) of a signal."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_rms(a_ptr, len(a))
 
 
-def zero_crossing_rate(a):
+def zero_crossing_rate(a: npt.ArrayLike) -> float:
     """Compute the zero-crossing rate of a signal."""
     a_ptr, a = _as_double_ptr(a)
     return lib.MD_zero_crossing_rate(a_ptr, len(a))
 
 
-def autocorrelation(a, max_lag):
+def autocorrelation(a: npt.ArrayLike, max_lag: int) -> npt.NDArray[np.float64]:
     """
     Compute the normalised autocorrelation of a signal.
 
@@ -88,7 +91,7 @@ def autocorrelation(a, max_lag):
     return out
 
 
-def peak_detect(a, threshold=0.0, min_distance=1):
+def peak_detect(a: npt.ArrayLike, threshold: float = 0.0, min_distance: int = 1) -> npt.NDArray[np.uint32]:
     """
     Detect peaks (local maxima) in a signal.
 
@@ -111,19 +114,19 @@ def peak_detect(a, threshold=0.0, min_distance=1):
     return peaks[: num_peaks[0]].copy()
 
 
-def f0_autocorrelation(signal, sample_rate, min_freq_hz=80.0, max_freq_hz=400.0):
+def f0_autocorrelation(signal: npt.ArrayLike, sample_rate: float, min_freq_hz: float = 80.0, max_freq_hz: float = 400.0) -> float:
     """Estimate F0 using autocorrelation."""
     s_ptr, signal = _as_double_ptr(signal)
     return lib.MD_f0_autocorrelation(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
 
 
-def f0_fft(signal, sample_rate, min_freq_hz=80.0, max_freq_hz=400.0):
+def f0_fft(signal: npt.ArrayLike, sample_rate: float, min_freq_hz: float = 80.0, max_freq_hz: float = 400.0) -> float:
     """Estimate F0 using FFT peak picking."""
     s_ptr, signal = _as_double_ptr(signal)
     return lib.MD_f0_fft(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
 
 
-def mix(a, b, w_a=0.5, w_b=0.5):
+def mix(a: npt.ArrayLike, b: npt.ArrayLike, w_a: float = 0.5, w_b: float = 0.5) -> npt.NDArray[np.float64]:
     """
     Mix (weighted sum) two signals.
 
@@ -146,12 +149,12 @@ def mix(a, b, w_a=0.5, w_b=0.5):
 # Signal scaling
 # ---------------------------------------------------------------------------
 
-def scale(value, oldmin, oldmax, newmin, newmax):
+def scale(value: float, oldmin: float, oldmax: float, newmin: float, newmax: float) -> float:
     """Map a single value from one range to another."""
     return lib.MD_scale(value, oldmin, oldmax, newmin, newmax)
 
 
-def scale_vec(a, oldmin, oldmax, newmin, newmax):
+def scale_vec(a: npt.ArrayLike, oldmin: float, oldmax: float, newmin: float, newmax: float) -> npt.NDArray[np.float64]:
     """Map every element of a vector from one range to another."""
     a_ptr, a_arr = _as_double_ptr(a)
     n = len(a_arr)
@@ -163,7 +166,7 @@ def scale_vec(a, oldmin, oldmax, newmin, newmax):
     return out
 
 
-def fit_within_range(a, newmin, newmax):
+def fit_within_range(a: npt.ArrayLike, newmin: float, newmax: float) -> npt.NDArray[np.float64]:
     """Fit values within [newmin, newmax]."""
     a_arr = np.ascontiguousarray(a, dtype=np.float64)
     n = len(a_arr)
@@ -174,7 +177,7 @@ def fit_within_range(a, newmin, newmax):
     return out
 
 
-def adjust_dblevel(signal, dblevel):
+def adjust_dblevel(signal: npt.ArrayLike, dblevel: float) -> npt.NDArray[np.float64]:
     """Automatic Gain Control: scale signal to target dB level, clip to [-1, 1]."""
     s_ptr, signal = _as_double_ptr(signal)
     n = len(signal)

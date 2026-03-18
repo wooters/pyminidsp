@@ -1,15 +1,20 @@
 """Polyphase sinc resampling (sample rate conversion)."""
 
+from __future__ import annotations
+
+import numpy as np
+import numpy.typing as npt
+
 from pyminidsp._minidsp_cffi import lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
 
 
-def resample_output_len(input_len, in_rate, out_rate):
+def resample_output_len(input_len: int, in_rate: float, out_rate: float) -> int:
     """Compute the number of output samples for a given resampling operation."""
     return lib.MD_resample_output_len(input_len, float(in_rate), float(out_rate))
 
 
-def resample(signal, in_rate, out_rate, num_zero_crossings=13, kaiser_beta=5.0):
+def resample(signal: npt.ArrayLike, in_rate: float, out_rate: float, num_zero_crossings: int = 13, kaiser_beta: float = 5.0) -> npt.NDArray[np.float64]:
     """
     Resample a signal using a polyphase sinc resampler with Kaiser-windowed
     anti-aliasing filter.

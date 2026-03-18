@@ -1,10 +1,15 @@
 """Signal generators: sine, noise, impulse, chirps, and spectrogram text."""
 
+from __future__ import annotations
+
+import numpy as np
+import numpy.typing as npt
+
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
 
 
-def sine_wave(n, amplitude=1.0, freq=440.0, sample_rate=44100.0):
+def sine_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
     """
     Generate a sine wave.
 
@@ -22,7 +27,7 @@ def sine_wave(n, amplitude=1.0, freq=440.0, sample_rate=44100.0):
     return out
 
 
-def white_noise(n, amplitude=1.0, seed=42):
+def white_noise(n: int, amplitude: float = 1.0, seed: int = 42) -> npt.NDArray[np.float64]:
     """
     Generate Gaussian white noise.
 
@@ -39,7 +44,7 @@ def white_noise(n, amplitude=1.0, seed=42):
     return out
 
 
-def impulse(n, amplitude=1.0, position=0):
+def impulse(n: int, amplitude: float = 1.0, position: int = 0) -> npt.NDArray[np.float64]:
     """
     Generate a discrete impulse (Kronecker delta).
 
@@ -56,7 +61,7 @@ def impulse(n, amplitude=1.0, position=0):
     return out
 
 
-def chirp_linear(n, amplitude=1.0, f_start=200.0, f_end=4000.0, sample_rate=16000.0):
+def chirp_linear(n: int, amplitude: float = 1.0, f_start: float = 200.0, f_end: float = 4000.0, sample_rate: float = 16000.0) -> npt.NDArray[np.float64]:
     """
     Generate a linear chirp (swept sine).
 
@@ -75,7 +80,7 @@ def chirp_linear(n, amplitude=1.0, f_start=200.0, f_end=4000.0, sample_rate=1600
     return out
 
 
-def chirp_log(n, amplitude=1.0, f_start=20.0, f_end=20000.0, sample_rate=44100.0):
+def chirp_log(n: int, amplitude: float = 1.0, f_start: float = 20.0, f_end: float = 20000.0, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
     """
     Generate a logarithmic chirp.
 
@@ -94,22 +99,22 @@ def chirp_log(n, amplitude=1.0, f_start=20.0, f_end=20000.0, sample_rate=44100.0
     return out
 
 
-def square_wave(n, amplitude=1.0, freq=440.0, sample_rate=44100.0):
+def square_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
     """Generate a square wave."""
     out, out_ptr = _new_double_array(n)
     lib.MD_square_wave(out_ptr, n, amplitude, freq, sample_rate)
     return out
 
 
-def sawtooth_wave(n, amplitude=1.0, freq=440.0, sample_rate=44100.0):
+def sawtooth_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
     """Generate a sawtooth wave."""
     out, out_ptr = _new_double_array(n)
     lib.MD_sawtooth_wave(out_ptr, n, amplitude, freq, sample_rate)
     return out
 
 
-def shepard_tone(n, amplitude=0.8, base_freq=440.0, sample_rate=44100.0,
-                 rate_octaves_per_sec=0.5, num_octaves=8):
+def shepard_tone(n: int, amplitude: float = 0.8, base_freq: float = 440.0, sample_rate: float = 44100.0,
+                 rate_octaves_per_sec: float = 0.5, num_octaves: int = 8) -> npt.NDArray[np.float64]:
     """
     Generate a Shepard tone (auditory illusion of endlessly rising/falling pitch).
 
@@ -134,8 +139,8 @@ def shepard_tone(n, amplitude=0.8, base_freq=440.0, sample_rate=44100.0,
 # Spectrogram text
 # ---------------------------------------------------------------------------
 
-def spectrogram_text(text, freq_lo=200.0, freq_hi=7500.0,
-                     duration_sec=2.0, sample_rate=16000.0):
+def spectrogram_text(text: str, freq_lo: float = 200.0, freq_hi: float = 7500.0,
+                     duration_sec: float = 2.0, sample_rate: float = 16000.0) -> npt.NDArray[np.float64]:
     """
     Synthesise audio that displays readable text in a spectrogram.
 

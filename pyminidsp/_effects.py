@@ -1,10 +1,15 @@
 """Simple audio effects: delay/echo, tremolo, comb reverb."""
 
+from __future__ import annotations
+
+import numpy as np
+import numpy.typing as npt
+
 from pyminidsp._minidsp_cffi import lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
 
 
-def delay_echo(signal, delay_samples, feedback=0.5, dry=1.0, wet=0.5):
+def delay_echo(signal: npt.ArrayLike, delay_samples: int, feedback: float = 0.5, dry: float = 1.0, wet: float = 0.5) -> npt.NDArray[np.float64]:
     """
     Apply a delay/echo effect.
 
@@ -25,7 +30,7 @@ def delay_echo(signal, delay_samples, feedback=0.5, dry=1.0, wet=0.5):
     return out
 
 
-def tremolo(signal, rate_hz, depth=0.5, sample_rate=44100.0):
+def tremolo(signal: npt.ArrayLike, rate_hz: float, depth: float = 0.5, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
     """
     Apply a tremolo effect (amplitude modulation).
 
@@ -45,7 +50,7 @@ def tremolo(signal, rate_hz, depth=0.5, sample_rate=44100.0):
     return out
 
 
-def comb_reverb(signal, delay_samples, feedback=0.5, dry=1.0, wet=0.3):
+def comb_reverb(signal: npt.ArrayLike, delay_samples: int, feedback: float = 0.5, dry: float = 1.0, wet: float = 0.3) -> npt.NDArray[np.float64]:
     """
     Apply a comb-filter reverb effect.
 

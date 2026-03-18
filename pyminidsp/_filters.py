@@ -1,21 +1,29 @@
 """FIR filters, convolution, and biquad (IIR) filtering."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy as np
+import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
+
+if TYPE_CHECKING:
+    from pyminidsp._minidsp_cffi import CData
 
 
 # ---------------------------------------------------------------------------
 # FIR filters / convolution
 # ---------------------------------------------------------------------------
 
-def convolution_num_samples(signal_len, kernel_len):
+def convolution_num_samples(signal_len: int, kernel_len: int) -> int:
     """Compute the output length of a full linear convolution."""
     return lib.MD_convolution_num_samples(signal_len, kernel_len)
 
 
-def convolution_time(signal, kernel):
+def convolution_time(signal: npt.ArrayLike, kernel: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Time-domain full linear convolution.
 
@@ -30,7 +38,7 @@ def convolution_time(signal, kernel):
     return out
 
 
-def moving_average(signal, window_len):
+def moving_average(signal: npt.ArrayLike, window_len: int) -> npt.NDArray[np.float64]:
     """
     Causal moving-average FIR filter.
 
@@ -44,7 +52,7 @@ def moving_average(signal, window_len):
     return out
 
 
-def fir_filter(signal, coeffs):
+def fir_filter(signal: npt.ArrayLike, coeffs: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Apply a causal FIR filter with arbitrary coefficients.
 
@@ -59,7 +67,7 @@ def fir_filter(signal, coeffs):
     return out
 
 
-def design_lowpass_fir(num_taps, cutoff_freq, sample_rate, kaiser_beta=5.0):
+def design_lowpass_fir(num_taps: int, cutoff_freq: float, sample_rate: float, kaiser_beta: float = 5.0) -> npt.NDArray[np.float64]:
     """
     Design a Kaiser-windowed sinc lowpass FIR filter.
 
@@ -78,7 +86,7 @@ def design_lowpass_fir(num_taps, cutoff_freq, sample_rate, kaiser_beta=5.0):
     return out
 
 
-def convolution_fft_ola(signal, kernel):
+def convolution_fft_ola(signal: npt.ArrayLike, kernel: npt.ArrayLike) -> npt.NDArray[np.float64]:
     """
     Full linear convolution using FFT overlap-add.
 
@@ -110,7 +118,9 @@ class BiquadFilter:
         ...     output = filt.process(sample)
     """
 
-    def __init__(self, filter_type, freq, sample_rate, db_gain=0.0, bandwidth=1.0):
+    _ptr: CData
+
+    def __init__(self, filter_type: int, freq: float, sample_rate: float, db_gain: float = 0.0, bandwidth: float = 1.0) -> None:
         """
         Create a new biquad filter.
 
@@ -125,16 +135,16 @@ class BiquadFilter:
         if self._ptr == ffi.NULL:
             raise MemoryError("Failed to allocate biquad filter")
 
-    def __del__(self):
+    def __del__(self) -> None:
         if hasattr(self, "_ptr") and self._ptr != ffi.NULL:
             lib.free(self._ptr)
             self._ptr = ffi.NULL
 
-    def process(self, sample):
+    def process(self, sample: float) -> float:
         """Process a single sample through the filter."""
         return lib.BiQuad(sample, self._ptr)
 
-    def process_array(self, signal):
+    def process_array(self, signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
         """
         Process an entire signal through the filter.
 

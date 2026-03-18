@@ -1,17 +1,20 @@
 """Audio steganography: hide and recover data within audio signals."""
 
+from __future__ import annotations
+
 import numpy as np
+import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array, STEG_LSB
 
 
-def steg_capacity(signal_len, sample_rate, method=STEG_LSB):
+def steg_capacity(signal_len: int, sample_rate: float, method: int = STEG_LSB) -> int:
     """Compute maximum message length that can be hidden."""
     return lib.MD_steg_capacity(signal_len, sample_rate, method)
 
 
-def steg_encode(host, message, sample_rate=44100.0, method=STEG_LSB):
+def steg_encode(host: npt.ArrayLike, message: str, sample_rate: float = 44100.0, method: int = STEG_LSB) -> tuple[npt.NDArray[np.float64], int]:
     """
     Encode a secret text message into a host audio signal.
 
@@ -32,7 +35,7 @@ def steg_encode(host, message, sample_rate=44100.0, method=STEG_LSB):
     return out, encoded
 
 
-def steg_decode(stego, sample_rate=44100.0, method=STEG_LSB, max_msg_len=4096):
+def steg_decode(stego: npt.ArrayLike, sample_rate: float = 44100.0, method: int = STEG_LSB, max_msg_len: int = 4096) -> str:
     """
     Decode a secret text message from a stego audio signal.
 
@@ -48,7 +51,7 @@ def steg_decode(stego, sample_rate=44100.0, method=STEG_LSB, max_msg_len=4096):
     return ffi.string(msg_buf, n).decode("utf-8", errors="replace")
 
 
-def steg_encode_bytes(host, data, sample_rate=44100.0, method=STEG_LSB):
+def steg_encode_bytes(host: npt.ArrayLike, data: bytes, sample_rate: float = 44100.0, method: int = STEG_LSB) -> tuple[npt.NDArray[np.float64], int]:
     """
     Encode arbitrary binary data into a host audio signal.
 
@@ -71,7 +74,7 @@ def steg_encode_bytes(host, data, sample_rate=44100.0, method=STEG_LSB):
     return out, encoded
 
 
-def steg_decode_bytes(stego, sample_rate=44100.0, method=STEG_LSB, max_len=4096):
+def steg_decode_bytes(stego: npt.ArrayLike, sample_rate: float = 44100.0, method: int = STEG_LSB, max_len: int = 4096) -> bytes:
     """
     Decode binary data from a stego audio signal.
 
@@ -86,7 +89,7 @@ def steg_decode_bytes(stego, sample_rate=44100.0, method=STEG_LSB, max_len=4096)
     return bytes(buf[:n])
 
 
-def steg_detect(signal, sample_rate=44100.0):
+def steg_detect(signal: npt.ArrayLike, sample_rate: float = 44100.0) -> tuple[int | None, int | None]:
     """
     Detect which steganography method was used.
 

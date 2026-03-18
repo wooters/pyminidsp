@@ -54,6 +54,9 @@ Issues = "https://github.com/wooters/pyminidsp/issues"
 [tool.setuptools.packages.find]
 include = ["pyminidsp*"]
 
+[tool.setuptools.package-data]
+pyminidsp = ["py.typed", "*.pyi"]
+
 # ---------------------------------------------------------------------------
 # cibuildwheel configuration
 # ---------------------------------------------------------------------------
@@ -91,3 +94,13 @@ before-all = [
     "brew install fftw",
     "git clone --depth 1 --branch v0.3.1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
 ]
+
+# ---------------------------------------------------------------------------
+# ty (type checker) configuration
+# ---------------------------------------------------------------------------
+[tool.ty.environment]
+python-version = "3.9"
+
+[tool.ty.src]
+include = ["pyminidsp"]
+exclude = ["pyminidsp/_build_minidsp.py"]

@@ -1,12 +1,15 @@
 """Generalized Cross-Correlation (GCC) delay estimation."""
 
+from __future__ import annotations
+
 import numpy as np
+import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array, GCC_PHAT
 
 
-def get_delay(sig_a, sig_b, margin, weighting=GCC_PHAT):
+def get_delay(sig_a: npt.ArrayLike, sig_b: npt.ArrayLike, margin: int, weighting: int = GCC_PHAT) -> tuple[int, float]:
     """
     Estimate the delay between two signals using GCC.
 
@@ -27,7 +30,7 @@ def get_delay(sig_a, sig_b, margin, weighting=GCC_PHAT):
     return delay, ent[0]
 
 
-def get_multiple_delays(signals, margin, weighting=GCC_PHAT):
+def get_multiple_delays(signals: list[npt.ArrayLike], margin: int, weighting: int = GCC_PHAT) -> npt.NDArray[np.int32]:
     """
     Estimate delays between a reference signal and M-1 other signals.
 
@@ -56,7 +59,7 @@ def get_multiple_delays(signals, margin, weighting=GCC_PHAT):
     return delays
 
 
-def gcc(sig_a, sig_b, weighting=GCC_PHAT):
+def gcc(sig_a: npt.ArrayLike, sig_b: npt.ArrayLike, weighting: int = GCC_PHAT) -> npt.NDArray[np.float64]:
     """
     Compute the full generalized cross-correlation between two signals.
 
