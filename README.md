@@ -1,5 +1,7 @@
 # pyminidsp
 
+[![PyPI version](https://img.shields.io/pypi/v/pyminidsp)](https://pypi.org/project/pyminidsp/) [![Python versions](https://img.shields.io/pypi/pyversions/pyminidsp)](https://pypi.org/project/pyminidsp/) [![License](https://img.shields.io/pypi/l/pyminidsp)](https://pypi.org/project/pyminidsp/) [![Build wheels](https://github.com/wooters/pyminidsp/actions/workflows/wheels.yml/badge.svg)](https://github.com/wooters/pyminidsp/actions/workflows/wheels.yml) [![Docs](https://github.com/wooters/pyminidsp/actions/workflows/docs.yml/badge.svg)](https://github.com/wooters/pyminidsp/actions/workflows/docs.yml)
+
 **[Documentation](https://wooters.github.io/pyminidsp/)**
 
 Python bindings to the [miniDSP](https://github.com/wooters/miniDSP) C library.
