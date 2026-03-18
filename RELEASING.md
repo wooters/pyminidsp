@@ -24,7 +24,16 @@ git commit -m "Bump version to 0.2.0"
 git push
 ```
 
-### 2. Validate on TestPyPI (recommended for first release or major changes)
+### 2. Update documentation
+
+Update the changelog and Sphinx version to reflect the new release:
+
+- `docs/changelog.rst` — replace `(unreleased)` with the release date, e.g. `0.5.0 (2026-03-18)`.
+- `docs/conf.py` — set `release = "0.5.0"` to match the new version.
+
+Commit alongside the version bump or as a separate commit before tagging.
+
+### 3. Validate on TestPyPI (recommended for first release or major changes)
 
 Push a pre-release tag to trigger a TestPyPI publish:
 
@@ -45,7 +54,7 @@ uv run --no-project \
 
 The `--extra-index-url` is needed so that dependencies (numpy, cffi) resolve from production PyPI.
 
-### 3. Publish to production PyPI
+### 4. Publish to production PyPI
 
 Once satisfied, push the stable tag:
 
@@ -56,7 +65,7 @@ git push origin v0.2.0
 
 CI will build and publish to PyPI automatically.
 
-### 4. Verify
+### 5. Verify
 
 ```bash
 uv run --no-project --with pyminidsp==0.2.0 \

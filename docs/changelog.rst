@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.0 (unreleased)
+0.5.0 (2026-03-18)
 -------------------
 
 - Upgraded miniDSP C library from v0.3.1 to v0.4.0.
