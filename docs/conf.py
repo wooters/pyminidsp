@@ -4,6 +4,7 @@ import os
 import sys
 
 # -- Path setup ---------------------------------------------------------------
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information ------------------------------------------------------
@@ -40,8 +41,8 @@ def _generate_audio(app):
         # Write marker so we don't regenerate on every rebuild
         with open(marker, "w") as f:
             f.write("ok\n")
-    except Exception as exc:
-        print(f"Warning: audio sample generation failed: {exc}")
+    except ImportError as exc:
+        print(f"Warning: audio sample generation skipped: {exc}")
         print("Audio previews will not be available in the built docs.")
 
 
@@ -57,8 +58,8 @@ def _generate_plots(app):
         generate(plots_dir)
         with open(marker, "w") as f:
             f.write("ok\n")
-    except Exception as exc:
-        print(f"Warning: plot generation failed: {exc}")
+    except ImportError as exc:
+        print(f"Warning: plot generation skipped: {exc}")
         print("Interactive plots will not be available in the built docs.")
 
 
