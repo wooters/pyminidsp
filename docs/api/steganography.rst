@@ -4,7 +4,7 @@ Audio Steganography
 Hide secret messages or binary data within audio signals so that casual
 listeners hear only the original sound.
 
-Two methods are provided:
+Three methods are provided:
 
 .. list-table::
    :header-rows: 1
@@ -25,8 +25,13 @@ Two methods are provided:
      - Above most listeners' hearing range
      - Moderate (survives mild noise)
      - sample_rate ≥ 40 kHz
+   * - **Spectrogram text** (:data:`STEG_SPECTEXT`)
+     - ~1 bit/sample (same as LSB)
+     - Audible as buzzy tones; visually readable in spectrogram
+     - Fragile (same as LSB)
+     - Any sample rate
 
-Both methods prepend a 32-bit length header so the decoder can recover
+All methods prepend a 32-bit length header so the decoder can recover
 the message without knowing its length in advance.
 
 .. autofunction:: pyminidsp.steg_capacity
@@ -41,11 +46,13 @@ the message without knowing its length in advance.
      representation.  Distortion ≈ −90 dB.
    - **Frequency-band** — adds a low-amplitude BFSK tone in the
      near-ultrasonic band (18.5 / 19.5 kHz).
+   - **Spectrogram text** — hybrid LSB encoding that also renders the
+     message as readable text in a spectrogram view.
 
    :param host: Host signal (not modified).
    :param message: String message to hide.
    :param sample_rate: Sample rate in Hz.
-   :param method: :data:`STEG_LSB` or :data:`STEG_FREQ_BAND`.
+   :param method: :data:`STEG_LSB`, :data:`STEG_FREQ_BAND`, or :data:`STEG_SPECTEXT`.
    :returns: ``(stego_signal, num_bytes_encoded)`` tuple.
 
    .. code-block:: python
@@ -67,7 +74,7 @@ the message without knowing its length in advance.
    :param host: Host signal.
    :param data: Bytes-like object to hide.
    :param sample_rate: Sample rate in Hz.
-   :param method: :data:`STEG_LSB` or :data:`STEG_FREQ_BAND`.
+   :param method: :data:`STEG_LSB`, :data:`STEG_FREQ_BAND`, or :data:`STEG_SPECTEXT`.
    :returns: ``(stego_signal, num_bytes_encoded)`` tuple.
 
 .. autofunction:: pyminidsp.steg_decode_bytes
@@ -80,9 +87,9 @@ the message without knowing its length in advance.
 
    Detect which steganography method (if any) was used.
 
-   Probes the signal for a valid header using both LSB and frequency-band
-   methods.  If both appear valid, frequency-band is preferred (lower
-   false-positive rate).
+   Probes the signal for a valid header using all three methods (LSB,
+   frequency-band, and spectrogram text).  If multiple appear valid,
+   frequency-band is preferred (lower false-positive rate).
 
    :returns: ``(method, payload_type)`` tuple, or ``(None, None)`` if no
              steganographic content is detected.

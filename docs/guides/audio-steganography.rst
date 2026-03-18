@@ -6,8 +6,8 @@ listeners hear only the original sound, while decoders can extract the
 hidden payload.
 
 
-Two methods
------------
+Three methods
+-------------
 
 .. list-table::
    :header-rows: 1
@@ -28,6 +28,11 @@ Two methods
      - Above most listeners' hearing
      - Moderate (survives mild noise)
      - sample_rate ≥ 40 kHz
+   * - **Spectrogram text**
+     - ~1 bit/sample (same as LSB)
+     - Audible as buzzy tones; visually readable in spectrogram
+     - Fragile (same as LSB)
+     - Any sample rate
 
 **LSB** flips the least-significant bit of a 16-bit PCM representation —
 distortion ≈ −90 dB.  Best for lossless pipelines (WAV, FLAC).
@@ -36,12 +41,26 @@ distortion ≈ −90 dB.  Best for lossless pipelines (WAV, FLAC).
 (bit 0) or 19.5 kHz (bit 1).  Choose this when light interference is
 expected.
 
+**Spectrogram text** is a hybrid method that hides data via LSB encoding
+*and* renders the message as readable text in a spectrogram view.  The
+message is rasterised with a built-in bitmap font, and sine waves at
+corresponding frequencies produce visible characters when viewed with
+a spectrogram analyser.
+
+.. seealso::
+
+   :doc:`spectrogram-text`
+      Detailed guide on the spectrogram text art synthesis function.
+
+   `miniDSP C library — Audio Steganography <https://wooters.github.io/miniDSP/audio-steganography.html>`_
+      Upstream C library documentation with algorithm details and C-level examples.
+
 
 Message structure
 -----------------
 
-Both methods prepend a **32-bit little-endian header**: bits 0–30 hold
-the byte count, bit 31 indicates payload type (0 = text, 1 = binary).
+All three methods prepend a **32-bit little-endian header**: bits 0–30
+hold the byte count, bit 31 indicates payload type (0 = text, 1 = binary).
 This lets the decoder recover messages without prior knowledge of length.
 
 
@@ -92,6 +111,16 @@ Hiding text
    </div>
 
 
+Spectrogram text encoding works the same way — just pass
+``method=md.STEG_SPECTEXT``:
+
+.. code-block:: python
+
+   stego_st, n = md.steg_encode(host, "HELLO",
+                                 sample_rate=44100.0, method=md.STEG_SPECTEXT)
+   print(f"Encoded {n} bytes (visible in spectrogram)")
+
+
 Recovering text
 ---------------
 
@@ -99,6 +128,10 @@ Recovering text
 
    recovered = md.steg_decode(stego, sample_rate=44100.0, method=md.STEG_LSB)
    print(recovered)  # "secret message"
+
+   # Recover from spectrogram-text encoded signal
+   recovered_st = md.steg_decode(stego_st, sample_rate=44100.0, method=md.STEG_SPECTEXT)
+   print(recovered_st)  # "HELLO"
 
 
 Binary data
@@ -119,7 +152,9 @@ Automatic detection
 
    method, payload_type = md.steg_detect(stego, sample_rate=44100.0)
    if method is not None:
-       print(f"Method: {'LSB' if method == md.STEG_LSB else 'Freq-band'}")
+       names = {md.STEG_LSB: "LSB", md.STEG_FREQ_BAND: "Freq-band",
+                md.STEG_SPECTEXT: "Spectrogram-text"}
+       print(f"Method: {names[method]}")
        print(f"Type: {'text' if payload_type == md.STEG_TYPE_TEXT else 'binary'}")
 
 
