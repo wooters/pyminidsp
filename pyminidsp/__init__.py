@@ -14,6 +14,9 @@ Example:
 from pyminidsp._core import *  # noqa: F401, F403
 from pyminidsp._core import (
     # Re-export everything explicitly for documentation
+    # Error handling
+    MiniDSPError,
+    ERR_NULL_POINTER, ERR_INVALID_SIZE, ERR_INVALID_RANGE, ERR_ALLOC_FAILED,
     # Math utilities
     bessel_i0, sinc,
     # Signal measurement
@@ -65,6 +68,9 @@ try:
 except _PNF:
     __version__ = "0.0.0"  # not installed via pip (e.g. editable dev checkout)
 __all__ = [
+    # Error handling
+    "MiniDSPError",
+    "ERR_NULL_POINTER", "ERR_INVALID_SIZE", "ERR_INVALID_RANGE", "ERR_ALLOC_FAILED",
     # Math utilities
     "bessel_i0", "sinc",
     # Signal measurement

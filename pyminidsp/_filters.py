@@ -8,7 +8,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 if TYPE_CHECKING:
     from pyminidsp._minidsp_cffi import CData
@@ -20,7 +20,9 @@ if TYPE_CHECKING:
 
 def convolution_num_samples(signal_len: int, kernel_len: int) -> int:
     """Compute the output length of a full linear convolution."""
-    return lib.MD_convolution_num_samples(signal_len, kernel_len)
+    result = lib.MD_convolution_num_samples(signal_len, kernel_len)
+    _check_error()
+    return result
 
 
 def convolution_time(signal: npt.ArrayLike, kernel: npt.ArrayLike) -> npt.NDArray[np.float64]:
@@ -35,6 +37,7 @@ def convolution_time(signal: npt.ArrayLike, kernel: npt.ArrayLike) -> npt.NDArra
     out_len = len(signal) + len(kernel) - 1
     out, out_ptr = _new_double_array(out_len)
     lib.MD_convolution_time(s_ptr, len(signal), k_ptr, len(kernel), out_ptr)
+    _check_error()
     return out
 
 
@@ -49,6 +52,7 @@ def moving_average(signal: npt.ArrayLike, window_len: int) -> npt.NDArray[np.flo
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_moving_average(s_ptr, n, window_len, out_ptr)
+    _check_error()
     return out
 
 
@@ -64,6 +68,7 @@ def fir_filter(signal: npt.ArrayLike, coeffs: npt.ArrayLike) -> npt.NDArray[np.f
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_fir_filter(s_ptr, n, c_ptr, len(coeffs), out_ptr)
+    _check_error()
     return out
 
 
@@ -83,6 +88,7 @@ def design_lowpass_fir(num_taps: int, cutoff_freq: float, sample_rate: float, ka
     out, out_ptr = _new_double_array(num_taps)
     lib.MD_design_lowpass_fir(out_ptr, num_taps, float(cutoff_freq),
                               float(sample_rate), float(kaiser_beta))
+    _check_error()
     return out
 
 
@@ -98,6 +104,7 @@ def convolution_fft_ola(signal: npt.ArrayLike, kernel: npt.ArrayLike) -> npt.NDA
     out_len = len(signal) + len(kernel) - 1
     out, out_ptr = _new_double_array(out_len)
     lib.MD_convolution_fft_ola(s_ptr, len(signal), k_ptr, len(kernel), out_ptr)
+    _check_error()
     return out
 
 

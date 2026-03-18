@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import atexit
+import threading
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -12,6 +13,51 @@ from pyminidsp._minidsp_cffi import ffi, lib
 
 if TYPE_CHECKING:
     from pyminidsp._minidsp_cffi import CData
+
+# ---------------------------------------------------------------------------
+# Error handling
+# ---------------------------------------------------------------------------
+
+class MiniDSPError(RuntimeError):
+    """Raised when the miniDSP C library reports an error."""
+
+    def __init__(self, code: int, func_name: str, message: str) -> None:
+        self.code = code
+        self.func_name = func_name
+        self.message = message
+        super().__init__(f"{func_name}: {message} (code {code})")
+
+
+# Error code constants matching MD_ErrorCode enum
+ERR_NULL_POINTER: int = 1
+ERR_INVALID_SIZE: int = 2
+ERR_INVALID_RANGE: int = 3
+ERR_ALLOC_FAILED: int = 4
+
+# Thread-local storage for error state
+_error_state = threading.local()
+
+
+@ffi.def_extern()
+def _pyminidsp_error_handler(code: int, func_name: object, message: object) -> None:
+    """CFFI callback invoked by the C library on error."""
+    _error_state.error = (
+        int(code),
+        ffi.string(func_name).decode("utf-8"),
+        ffi.string(message).decode("utf-8"),
+    )
+
+
+def _check_error() -> None:
+    """Check thread-local error state and raise MiniDSPError if set."""
+    err = getattr(_error_state, "error", None)
+    if err is not None:
+        _error_state.error = None
+        raise MiniDSPError(err[0], err[1], err[2])
+
+
+# Register our Python callback as the C error handler
+lib.MD_set_error_handler(lib._pyminidsp_error_handler)
 
 # ---------------------------------------------------------------------------
 # Constants

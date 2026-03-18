@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 
 def sine_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate: float = 44100.0) -> npt.NDArray[np.float64]:
@@ -24,6 +24,7 @@ def sine_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate: 
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_sine_wave(out_ptr, n, amplitude, freq, sample_rate)
+    _check_error()
     return out
 
 
@@ -41,6 +42,7 @@ def white_noise(n: int, amplitude: float = 1.0, seed: int = 42) -> npt.NDArray[n
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_white_noise(out_ptr, n, amplitude, seed)
+    _check_error()
     return out
 
 
@@ -58,6 +60,7 @@ def impulse(n: int, amplitude: float = 1.0, position: int = 0) -> npt.NDArray[np
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_impulse(out_ptr, n, amplitude, position)
+    _check_error()
     return out
 
 
@@ -77,6 +80,7 @@ def chirp_linear(n: int, amplitude: float = 1.0, f_start: float = 200.0, f_end: 
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_chirp_linear(out_ptr, n, amplitude, f_start, f_end, sample_rate)
+    _check_error()
     return out
 
 
@@ -96,6 +100,7 @@ def chirp_log(n: int, amplitude: float = 1.0, f_start: float = 20.0, f_end: floa
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_chirp_log(out_ptr, n, amplitude, f_start, f_end, sample_rate)
+    _check_error()
     return out
 
 
@@ -103,6 +108,7 @@ def square_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_rate
     """Generate a square wave."""
     out, out_ptr = _new_double_array(n)
     lib.MD_square_wave(out_ptr, n, amplitude, freq, sample_rate)
+    _check_error()
     return out
 
 
@@ -110,6 +116,7 @@ def sawtooth_wave(n: int, amplitude: float = 1.0, freq: float = 440.0, sample_ra
     """Generate a sawtooth wave."""
     out, out_ptr = _new_double_array(n)
     lib.MD_sawtooth_wave(out_ptr, n, amplitude, freq, sample_rate)
+    _check_error()
     return out
 
 
@@ -132,6 +139,7 @@ def shepard_tone(n: int, amplitude: float = 0.8, base_freq: float = 440.0, sampl
     out, out_ptr = _new_double_array(n)
     lib.MD_shepard_tone(out_ptr, n, amplitude, base_freq, sample_rate,
                         rate_octaves_per_sec, num_octaves)
+    _check_error()
     return out
 
 
@@ -160,4 +168,5 @@ def spectrogram_text(text: str, freq_lo: float = 200.0, freq_hi: float = 7500.0,
     n_written = lib.MD_spectrogram_text(out_ptr, max_len, text_bytes,
                                          freq_lo, freq_hi,
                                          duration_sec, sample_rate)
+    _check_error()
     return out[:n_written].copy()

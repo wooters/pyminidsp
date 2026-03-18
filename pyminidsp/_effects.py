@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 
 def delay_echo(signal: npt.ArrayLike, delay_samples: int, feedback: float = 0.5, dry: float = 1.0, wet: float = 0.5) -> npt.NDArray[np.float64]:
@@ -27,6 +27,7 @@ def delay_echo(signal: npt.ArrayLike, delay_samples: int, feedback: float = 0.5,
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_delay_echo(s_ptr, out_ptr, n, delay_samples, feedback, dry, wet)
+    _check_error()
     return out
 
 
@@ -47,6 +48,7 @@ def tremolo(signal: npt.ArrayLike, rate_hz: float, depth: float = 0.5, sample_ra
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_tremolo(s_ptr, out_ptr, n, rate_hz, depth, sample_rate)
+    _check_error()
     return out
 
 
@@ -68,4 +70,5 @@ def comb_reverb(signal: npt.ArrayLike, delay_samples: int, feedback: float = 0.5
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_comb_reverb(s_ptr, out_ptr, n, delay_samples, feedback, dry, wet)
+    _check_error()
     return out

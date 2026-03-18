@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 # ---------------------------------------------------------------------------
 # Signal measurement
@@ -17,31 +17,41 @@ def dot(a: npt.ArrayLike, b: npt.ArrayLike) -> float:
     a_ptr, a = _as_double_ptr(a)
     b_ptr, b = _as_double_ptr(b)
     n = min(len(a), len(b))
-    return lib.MD_dot(a_ptr, b_ptr, n)
+    result = lib.MD_dot(a_ptr, b_ptr, n)
+    _check_error()
+    return result
 
 
 def entropy(a: npt.ArrayLike, clip: bool = False) -> float:
     """Compute the normalized entropy of a distribution."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_entropy(a_ptr, len(a), clip)
+    result = lib.MD_entropy(a_ptr, len(a), clip)
+    _check_error()
+    return result
 
 
 def energy(a: npt.ArrayLike) -> float:
     """Compute signal energy: sum of squared samples."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_energy(a_ptr, len(a))
+    result = lib.MD_energy(a_ptr, len(a))
+    _check_error()
+    return result
 
 
 def power(a: npt.ArrayLike) -> float:
     """Compute signal power: energy / N."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_power(a_ptr, len(a))
+    result = lib.MD_power(a_ptr, len(a))
+    _check_error()
+    return result
 
 
 def power_db(a: npt.ArrayLike) -> float:
     """Compute signal power in decibels."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_power_db(a_ptr, len(a))
+    result = lib.MD_power_db(a_ptr, len(a))
+    _check_error()
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -50,12 +60,16 @@ def power_db(a: npt.ArrayLike) -> float:
 
 def bessel_i0(x: float) -> float:
     """Compute the zeroth-order modified Bessel function of the first kind."""
-    return lib.MD_bessel_i0(float(x))
+    result = lib.MD_bessel_i0(float(x))
+    _check_error()
+    return result
 
 
 def sinc(x: float) -> float:
     """Compute the normalized sinc function: sin(pi*x) / (pi*x), with sinc(0) = 1."""
-    return lib.MD_sinc(float(x))
+    result = lib.MD_sinc(float(x))
+    _check_error()
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -65,13 +79,17 @@ def sinc(x: float) -> float:
 def rms(a: npt.ArrayLike) -> float:
     """Compute the root mean square (RMS) of a signal."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_rms(a_ptr, len(a))
+    result = lib.MD_rms(a_ptr, len(a))
+    _check_error()
+    return result
 
 
 def zero_crossing_rate(a: npt.ArrayLike) -> float:
     """Compute the zero-crossing rate of a signal."""
     a_ptr, a = _as_double_ptr(a)
-    return lib.MD_zero_crossing_rate(a_ptr, len(a))
+    result = lib.MD_zero_crossing_rate(a_ptr, len(a))
+    _check_error()
+    return result
 
 
 def autocorrelation(a: npt.ArrayLike, max_lag: int) -> npt.NDArray[np.float64]:
@@ -88,6 +106,7 @@ def autocorrelation(a: npt.ArrayLike, max_lag: int) -> npt.NDArray[np.float64]:
     a_ptr, a = _as_double_ptr(a)
     out, out_ptr = _new_double_array(max_lag)
     lib.MD_autocorrelation(a_ptr, len(a), out_ptr, max_lag)
+    _check_error()
     return out
 
 
@@ -111,19 +130,24 @@ def peak_detect(a: npt.ArrayLike, threshold: float = 0.0, min_distance: int = 1)
         a_ptr, n, threshold, min_distance,
         ffi.cast("unsigned *", peaks.ctypes.data), num_peaks,
     )
+    _check_error()
     return peaks[: num_peaks[0]].copy()
 
 
 def f0_autocorrelation(signal: npt.ArrayLike, sample_rate: float, min_freq_hz: float = 80.0, max_freq_hz: float = 400.0) -> float:
     """Estimate F0 using autocorrelation."""
     s_ptr, signal = _as_double_ptr(signal)
-    return lib.MD_f0_autocorrelation(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
+    result = lib.MD_f0_autocorrelation(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
+    _check_error()
+    return result
 
 
 def f0_fft(signal: npt.ArrayLike, sample_rate: float, min_freq_hz: float = 80.0, max_freq_hz: float = 400.0) -> float:
     """Estimate F0 using FFT peak picking."""
     s_ptr, signal = _as_double_ptr(signal)
-    return lib.MD_f0_fft(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
+    result = lib.MD_f0_fft(s_ptr, len(signal), sample_rate, min_freq_hz, max_freq_hz)
+    _check_error()
+    return result
 
 
 def mix(a: npt.ArrayLike, b: npt.ArrayLike, w_a: float = 0.5, w_b: float = 0.5) -> npt.NDArray[np.float64]:
@@ -142,6 +166,7 @@ def mix(a: npt.ArrayLike, b: npt.ArrayLike, w_a: float = 0.5, w_b: float = 0.5) 
     n = min(len(a), len(b))
     out, out_ptr = _new_double_array(n)
     lib.MD_mix(a_ptr, b_ptr, out_ptr, n, w_a, w_b)
+    _check_error()
     return out
 
 
@@ -151,7 +176,9 @@ def mix(a: npt.ArrayLike, b: npt.ArrayLike, w_a: float = 0.5, w_b: float = 0.5) 
 
 def scale(value: float, oldmin: float, oldmax: float, newmin: float, newmax: float) -> float:
     """Map a single value from one range to another."""
-    return lib.MD_scale(value, oldmin, oldmax, newmin, newmax)
+    result = lib.MD_scale(value, oldmin, oldmax, newmin, newmax)
+    _check_error()
+    return result
 
 
 def scale_vec(a: npt.ArrayLike, oldmin: float, oldmax: float, newmin: float, newmax: float) -> npt.NDArray[np.float64]:
@@ -163,6 +190,7 @@ def scale_vec(a: npt.ArrayLike, oldmin: float, oldmax: float, newmin: float, new
     in_copy = np.array(a_arr, dtype=np.float64, copy=True)
     in_ptr = ffi.cast("double *", in_copy.ctypes.data)
     lib.MD_scale_vec(in_ptr, out_ptr, n, oldmin, oldmax, newmin, newmax)
+    _check_error()
     return out
 
 
@@ -174,6 +202,7 @@ def fit_within_range(a: npt.ArrayLike, newmin: float, newmax: float) -> npt.NDAr
     in_ptr = ffi.cast("double *", in_copy.ctypes.data)
     out, out_ptr = _new_double_array(n)
     lib.MD_fit_within_range(in_ptr, out_ptr, n, newmin, newmax)
+    _check_error()
     return out
 
 
@@ -183,4 +212,5 @@ def adjust_dblevel(signal: npt.ArrayLike, dblevel: float) -> npt.NDArray[np.floa
     n = len(signal)
     out, out_ptr = _new_double_array(n)
     lib.MD_adjust_dblevel(s_ptr, out_ptr, n, dblevel)
+    _check_error()
     return out

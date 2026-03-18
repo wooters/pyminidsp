@@ -1,8 +1,17 @@
 Changelog
 =========
 
-0.4.0 (unreleased)
+0.5.0 (unreleased)
 -------------------
+
+- Upgraded miniDSP C library from v0.3.1 to v0.4.0.
+- New: ``MiniDSPError`` exception — C-level errors now raise Python exceptions
+  instead of silently returning default values.
+- New: ``ERR_NULL_POINTER``, ``ERR_INVALID_SIZE``, ``ERR_INVALID_RANGE``,
+  ``ERR_ALLOC_FAILED`` error code constants.
+
+0.4.0
+-----
 
 - Upgraded miniDSP C library from v0.1.0 to v0.3.1.
 - New: ``design_lowpass_fir()`` — Kaiser-windowed sinc lowpass FIR filter design.

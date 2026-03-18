@@ -6,12 +6,14 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array, STEG_LSB
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error, STEG_LSB
 
 
 def steg_capacity(signal_len: int, sample_rate: float, method: int = STEG_LSB) -> int:
     """Compute maximum message length that can be hidden."""
-    return lib.MD_steg_capacity(signal_len, sample_rate, method)
+    result = lib.MD_steg_capacity(signal_len, sample_rate, method)
+    _check_error()
+    return result
 
 
 def steg_encode(host: npt.ArrayLike, message: str, sample_rate: float = 44100.0, method: int = STEG_LSB) -> tuple[npt.NDArray[np.float64], int]:
@@ -32,6 +34,7 @@ def steg_encode(host: npt.ArrayLike, message: str, sample_rate: float = 44100.0,
     out, out_ptr = _new_double_array(n)
     msg_bytes = message.encode("utf-8")
     encoded = lib.MD_steg_encode(h_ptr, out_ptr, n, sample_rate, msg_bytes, method)
+    _check_error()
     return out, encoded
 
 
@@ -46,6 +49,7 @@ def steg_decode(stego: npt.ArrayLike, sample_rate: float = 44100.0, method: int 
     msg_buf = ffi.new("char[]", max_msg_len)
     n = lib.MD_steg_decode(s_ptr, len(stego), sample_rate,
                            msg_buf, max_msg_len, method)
+    _check_error()
     if n == 0:
         return ""
     return ffi.string(msg_buf, n).decode("utf-8", errors="replace")
@@ -71,6 +75,7 @@ def steg_encode_bytes(host: npt.ArrayLike, data: bytes, sample_rate: float = 441
     data_ptr = ffi.from_buffer("const unsigned char *", data)
     encoded = lib.MD_steg_encode_bytes(h_ptr, out_ptr, n, sample_rate,
                                         data_ptr, len(data), method)
+    _check_error()
     return out, encoded
 
 
@@ -86,6 +91,7 @@ def steg_decode_bytes(stego: npt.ArrayLike, sample_rate: float = 44100.0, method
     buf_ptr = ffi.cast("unsigned char *", buf.ctypes.data)
     n = lib.MD_steg_decode_bytes(s_ptr, len(stego), sample_rate,
                                   buf_ptr, max_len, method)
+    _check_error()
     return bytes(buf[:n])
 
 
@@ -101,6 +107,7 @@ def steg_detect(signal: npt.ArrayLike, sample_rate: float = 44100.0) -> tuple[in
     s_ptr, signal = _as_double_ptr(signal)
     ptype = ffi.new("int *")
     method = lib.MD_steg_detect(s_ptr, len(signal), sample_rate, ptype)
+    _check_error()
     if method < 0:
         return None, None
     return method, ptype[0]

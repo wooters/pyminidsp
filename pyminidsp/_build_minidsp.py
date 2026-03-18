@@ -23,6 +23,23 @@ ffibuilder = cffi.FFI()
 ffibuilder.cdef("""
     /* === minidsp.h === */
 
+    /* Error handling */
+    typedef enum {
+        MD_ERR_NULL_POINTER  = 1,
+        MD_ERR_INVALID_SIZE  = 2,
+        MD_ERR_INVALID_RANGE = 3,
+        MD_ERR_ALLOC_FAILED  = 4,
+    } MD_ErrorCode;
+
+    typedef void (*MD_ErrorHandler)(MD_ErrorCode code,
+                                    const char *func_name,
+                                    const char *message);
+    void MD_set_error_handler(MD_ErrorHandler handler);
+
+    extern "Python" void _pyminidsp_error_handler(MD_ErrorCode code,
+                                                   const char *func_name,
+                                                   const char *message);
+
     /* Basic signal measurement */
     double MD_dot(const double *a, const double *b, unsigned N);
     double MD_entropy(const double *a, unsigned N, _Bool clip);
@@ -256,6 +273,7 @@ print(f"Using miniDSP source from: {_minidsp_src}")
 # libsndfile and portaudio respectively — those are optional)
 _core_sources = [
     "src/minidsp_core.c",
+    "src/minidsp_error.c",
     "src/minidsp_generators.c",
     "src/minidsp_spectrum.c",
     "src/minidsp_fir.c",

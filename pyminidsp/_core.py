@@ -13,6 +13,8 @@ from pyminidsp._helpers import (  # noqa: F401
     LPF, HPF, BPF, NOTCH, PEQ, LSH, HSH,
     STEG_LSB, STEG_FREQ_BAND, STEG_SPECTEXT, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
     GCC_SIMP, GCC_PHAT,
+    ERR_NULL_POINTER, ERR_INVALID_SIZE, ERR_INVALID_RANGE, ERR_ALLOC_FAILED,
+    MiniDSPError,
     _as_double_ptr, _new_double_array,
     shutdown,
 )

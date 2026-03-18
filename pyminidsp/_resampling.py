@@ -6,12 +6,14 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 
 def resample_output_len(input_len: int, in_rate: float, out_rate: float) -> int:
     """Compute the number of output samples for a given resampling operation."""
-    return lib.MD_resample_output_len(input_len, float(in_rate), float(out_rate))
+    result = lib.MD_resample_output_len(input_len, float(in_rate), float(out_rate))
+    _check_error()
+    return result
 
 
 def resample(signal: npt.ArrayLike, in_rate: float, out_rate: float, num_zero_crossings: int = 13, kaiser_beta: float = 5.0) -> npt.NDArray[np.float64]:
@@ -32,10 +34,12 @@ def resample(signal: npt.ArrayLike, in_rate: float, out_rate: float, num_zero_cr
     s_ptr, signal = _as_double_ptr(signal)
     input_len = len(signal)
     max_output_len = lib.MD_resample_output_len(input_len, float(in_rate), float(out_rate))
+    _check_error()
     out, out_ptr = _new_double_array(max_output_len)
     actual_len = lib.MD_resample(
         s_ptr, input_len, out_ptr, max_output_len,
         float(in_rate), float(out_rate),
         int(num_zero_crossings), float(kaiser_beta),
     )
+    _check_error()
     return out[:actual_len]

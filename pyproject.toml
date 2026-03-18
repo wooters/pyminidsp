@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyminidsp"
-version = "0.4.0"
+version = "0.5.0"
 description = "Python bindings to the miniDSP C library"
 readme = "README.md"
 license = {text = "MIT"}
@@ -73,7 +73,7 @@ build-frontend = "build[uv]"
 
 # Install FFTW3 and clone the miniDSP C source before each wheel build
 before-all = [
-    "git clone --depth 1 --branch v0.3.1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+    "git clone --depth 1 --branch v0.4.0 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
 ]
 
 [tool.cibuildwheel.environment]
@@ -83,7 +83,7 @@ MINIDSP_SRC = "/tmp/miniDSP"
 [tool.cibuildwheel.linux]
 before-all = [
     "yum install -y fftw-devel || dnf install -y fftw-devel || (apt-get update && apt-get install -y libfftw3-dev)",
-    "git clone --depth 1 --branch v0.3.1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+    "git clone --depth 1 --branch v0.4.0 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
 ]
 
 # --- macOS ---
@@ -92,7 +92,7 @@ before-all = [
 environment = { MACOSX_DEPLOYMENT_TARGET = "15.0", MINIDSP_SRC = "/tmp/miniDSP" }
 before-all = [
     "brew install fftw",
-    "git clone --depth 1 --branch v0.3.1 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
+    "git clone --depth 1 --branch v0.4.0 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
 ]
 
 # ---------------------------------------------------------------------------

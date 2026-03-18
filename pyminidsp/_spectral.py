@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error
 
 
 # ---------------------------------------------------------------------------
@@ -32,6 +32,7 @@ def lowpass_brickwall(signal: npt.ArrayLike, cutoff_hz: float, sample_rate: floa
     out = signal.copy()
     out_ptr = ffi.cast("double *", out.ctypes.data)
     lib.MD_lowpass_brickwall(out_ptr, len(out), float(cutoff_hz), float(sample_rate))
+    _check_error()
     return out
 
 def magnitude_spectrum(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
@@ -46,6 +47,7 @@ def magnitude_spectrum(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     num_bins = n // 2 + 1
     out, out_ptr = _new_double_array(num_bins)
     lib.MD_magnitude_spectrum(s_ptr, n, out_ptr)
+    _check_error()
     return out
 
 
@@ -61,6 +63,7 @@ def power_spectral_density(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     num_bins = n // 2 + 1
     out, out_ptr = _new_double_array(num_bins)
     lib.MD_power_spectral_density(s_ptr, n, out_ptr)
+    _check_error()
     return out
 
 
@@ -76,12 +79,15 @@ def phase_spectrum(signal: npt.ArrayLike) -> npt.NDArray[np.float64]:
     num_bins = n // 2 + 1
     out, out_ptr = _new_double_array(num_bins)
     lib.MD_phase_spectrum(s_ptr, n, out_ptr)
+    _check_error()
     return out
 
 
 def stft_num_frames(signal_len: int, n: int, hop: int) -> int:
     """Compute the number of STFT frames."""
-    return lib.MD_stft_num_frames(signal_len, n, hop)
+    result = lib.MD_stft_num_frames(signal_len, n, hop)
+    _check_error()
+    return result
 
 
 def stft(signal: npt.ArrayLike, n: int, hop: int) -> npt.NDArray[np.float64]:
@@ -102,6 +108,7 @@ def stft(signal: npt.ArrayLike, n: int, hop: int) -> npt.NDArray[np.float64]:
     num_bins = n // 2 + 1
     out, out_ptr = _new_double_array(num_frames * num_bins)
     lib.MD_stft(s_ptr, signal_len, n, hop, out_ptr)
+    _check_error()
     return out.reshape(num_frames, num_bins)
 
 
@@ -124,6 +131,7 @@ def mel_filterbank(n: int, sample_rate: float, num_mels: int = 26, min_freq_hz: 
     num_bins = n // 2 + 1
     out, out_ptr = _new_double_array(num_mels * num_bins)
     lib.MD_mel_filterbank(n, sample_rate, num_mels, min_freq_hz, max_freq_hz, out_ptr)
+    _check_error()
     return out.reshape(num_mels, num_bins)
 
 
@@ -140,6 +148,7 @@ def mel_energies(signal: npt.ArrayLike, sample_rate: float, num_mels: int = 26, 
     n = len(signal)
     out, out_ptr = _new_double_array(num_mels)
     lib.MD_mel_energies(s_ptr, n, sample_rate, num_mels, min_freq_hz, max_freq_hz, out_ptr)
+    _check_error()
     return out
 
 
@@ -166,6 +175,7 @@ def mfcc(signal: npt.ArrayLike, sample_rate: float, num_mels: int = 26, num_coef
     out, out_ptr = _new_double_array(num_coeffs)
     lib.MD_mfcc(s_ptr, n, sample_rate, num_mels, num_coeffs,
                 min_freq_hz, max_freq_hz, out_ptr)
+    _check_error()
     return out
 
 
@@ -177,6 +187,7 @@ def hann_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Hanning (Hann) window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Hann_Win(out_ptr, n)
+    _check_error()
     return out
 
 
@@ -184,6 +195,7 @@ def hamming_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Hamming window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Hamming_Win(out_ptr, n)
+    _check_error()
     return out
 
 
@@ -191,6 +203,7 @@ def blackman_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a Blackman window of length n."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Blackman_Win(out_ptr, n)
+    _check_error()
     return out
 
 
@@ -198,6 +211,7 @@ def rect_window(n: int) -> npt.NDArray[np.float64]:
     """Generate a rectangular window of length n (all ones)."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Rect_Win(out_ptr, n)
+    _check_error()
     return out
 
 
@@ -218,4 +232,5 @@ def kaiser_window(n: int, beta: float) -> npt.NDArray[np.float64]:
     """
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Kaiser_Win(out_ptr, n, float(beta))
+    _check_error()
     return out

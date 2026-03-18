@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from pyminidsp._minidsp_cffi import ffi, lib
-from pyminidsp._helpers import _as_double_ptr, _new_double_array, GCC_PHAT
+from pyminidsp._helpers import _as_double_ptr, _new_double_array, _check_error, GCC_PHAT
 
 
 def get_delay(sig_a: npt.ArrayLike, sig_b: npt.ArrayLike, margin: int, weighting: int = GCC_PHAT) -> tuple[int, float]:
@@ -27,6 +27,7 @@ def get_delay(sig_a: npt.ArrayLike, sig_b: npt.ArrayLike, margin: int, weighting
     n = min(len(sig_a), len(sig_b))
     ent = ffi.new("double *")
     delay = lib.MD_get_delay(a_ptr, b_ptr, n, ent, margin, weighting)
+    _check_error()
     return delay, ent[0]
 
 
@@ -56,6 +57,7 @@ def get_multiple_delays(signals: list[npt.ArrayLike], margin: int, weighting: in
         sigs_arr, m, n, margin, weighting,
         ffi.cast("int *", delays.ctypes.data),
     )
+    _check_error()
     return delays
 
 
@@ -76,4 +78,5 @@ def gcc(sig_a: npt.ArrayLike, sig_b: npt.ArrayLike, weighting: int = GCC_PHAT) -
     n = min(len(sig_a), len(sig_b))
     out, out_ptr = _new_double_array(n)
     lib.MD_gcc(a_ptr, b_ptr, n, out_ptr, weighting)
+    _check_error()
     return out
