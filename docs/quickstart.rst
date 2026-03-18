@@ -27,6 +27,47 @@ Input arrays are automatically converted if needed.
    to free memory sooner.
 
 
+Error handling
+--------------
+
+All pyminidsp functions raise :class:`~pyminidsp.MiniDSPError` when the
+underlying C library reports an error (invalid inputs, out-of-range
+parameters, etc.).
+
+.. code-block:: python
+
+   import numpy as np
+   import pyminidsp as md
+   from pyminidsp import MiniDSPError
+
+   try:
+       md.rms(np.array([]))  # empty array → invalid size
+   except MiniDSPError as err:
+       print(err.func_name)  # "MD_rms"
+       print(err.code)       # 2
+       print(err.message)    # "size must be > 0"
+
+Use the error code constants to handle specific error types:
+
+.. code-block:: python
+
+   from pyminidsp import MiniDSPError, ERR_INVALID_SIZE, ERR_INVALID_RANGE
+
+   try:
+       result = md.rms(np.array([]))
+   except MiniDSPError as err:
+       if err.code == ERR_INVALID_SIZE:
+           print("Bad array length — check your input")
+       elif err.code == ERR_INVALID_RANGE:
+           print("Parameter out of range")
+       else:
+           raise  # unexpected error, re-raise
+
+See :class:`~pyminidsp.MiniDSPError` and the
+:data:`error code constants <pyminidsp.ERR_NULL_POINTER>` for the full
+API reference.
+
+
 Signal generation
 -----------------
 
