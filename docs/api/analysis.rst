@@ -4,6 +4,31 @@ Signal Analysis
 Time-domain analysis tools for characterising signal properties,
 detecting features, and estimating pitch.
 
+.. autofunction:: pyminidsp.bessel_i0
+
+   Compute the zeroth-order modified Bessel function of the first kind,
+   :math:`I_0(x)`.  Used internally for Kaiser window generation, but
+   also useful for filter design and statistical distributions.
+
+   :param x: Input value.
+   :returns: :math:`I_0(x)` as a float.
+
+.. autofunction:: pyminidsp.sinc
+
+   Compute the normalized sinc function:
+
+   .. math::
+
+      \mathrm{sinc}(x) = \begin{cases}
+         1 & x = 0 \\
+         \frac{\sin(\pi x)}{\pi x} & x \ne 0
+      \end{cases}
+
+   Used in ideal filter design, interpolation, and resampling.
+
+   :param x: Input value.
+   :returns: sinc(*x*) as a float.
+
 .. autofunction:: pyminidsp.rms
 
    Compute the root mean square (RMS) of a signal — the standard measure

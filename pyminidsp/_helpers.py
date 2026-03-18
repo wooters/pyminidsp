@@ -22,6 +22,7 @@ HSH = 6    # High shelf
 # Steganography methods
 STEG_LSB = 0
 STEG_FREQ_BAND = 1
+STEG_SPECTEXT = 2
 STEG_TYPE_TEXT = 0
 STEG_TYPE_BINARY = 1
 

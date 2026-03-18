@@ -59,6 +59,25 @@ def fir_filter(signal, coeffs):
     return out
 
 
+def design_lowpass_fir(num_taps, cutoff_freq, sample_rate, kaiser_beta=5.0):
+    """
+    Design a Kaiser-windowed sinc lowpass FIR filter.
+
+    Args:
+        num_taps: Number of filter coefficients (filter order + 1).
+        cutoff_freq: Cutoff frequency in Hz.
+        sample_rate: Sampling rate in Hz.
+        kaiser_beta: Kaiser window shape parameter (default 5.0).
+
+    Returns:
+        numpy array of length num_taps containing the filter coefficients.
+    """
+    out, out_ptr = _new_double_array(num_taps)
+    lib.MD_design_lowpass_fir(out_ptr, num_taps, float(cutoff_freq),
+                              float(sample_rate), float(kaiser_beta))
+    return out
+
+
 def convolution_fft_ola(signal, kernel):
     """
     Full linear convolution using FFT overlap-add.

@@ -15,6 +15,7 @@ before being passed to the underlying C library.
    analysis
    effects
    fir
+   resampling
    scaling
    spectrum
    windows

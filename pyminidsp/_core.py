@@ -11,7 +11,7 @@ so that existing ``from pyminidsp._core import X`` imports continue to work.
 # Constants and helpers
 from pyminidsp._helpers import (  # noqa: F401
     LPF, HPF, BPF, NOTCH, PEQ, LSH, HSH,
-    STEG_LSB, STEG_FREQ_BAND, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
+    STEG_LSB, STEG_FREQ_BAND, STEG_SPECTEXT, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
     GCC_SIMP, GCC_PHAT,
     _as_double_ptr, _new_double_array,
     shutdown,
@@ -19,6 +19,7 @@ from pyminidsp._helpers import (  # noqa: F401
 
 # Signal measurement & analysis & scaling
 from pyminidsp._analysis import (  # noqa: F401
+    bessel_i0, sinc,
     dot, entropy, energy, power, power_db,
     rms, zero_crossing_rate, autocorrelation, peak_detect,
     f0_autocorrelation, f0_fft, mix,
@@ -31,15 +32,16 @@ from pyminidsp._effects import delay_echo, tremolo, comb_reverb  # noqa: F401
 # FIR filters / convolution / biquad
 from pyminidsp._filters import (  # noqa: F401
     convolution_num_samples, convolution_time, moving_average,
-    fir_filter, convolution_fft_ola,
+    fir_filter, design_lowpass_fir, convolution_fft_ola,
     BiquadFilter,
 )
 
 # FFT / spectrum / mel / MFCC / windows
 from pyminidsp._spectral import (  # noqa: F401
+    lowpass_brickwall,
     magnitude_spectrum, power_spectral_density, phase_spectrum,
     stft_num_frames, stft, mel_filterbank, mel_energies, mfcc,
-    hann_window, hamming_window, blackman_window, rect_window,
+    hann_window, hamming_window, blackman_window, rect_window, kaiser_window,
 )
 
 # Signal generators
@@ -54,6 +56,9 @@ from pyminidsp._dtmf import dtmf_signal_length, dtmf_generate, dtmf_detect  # no
 
 # GCC delay estimation
 from pyminidsp._gcc import get_delay, get_multiple_delays, gcc  # noqa: F401
+
+# Resampling
+from pyminidsp._resampling import resample_output_len, resample  # noqa: F401
 
 # Steganography
 from pyminidsp._steganography import (  # noqa: F401

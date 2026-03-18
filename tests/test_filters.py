@@ -58,6 +58,32 @@ class TestFirFilter:
         np.testing.assert_allclose(out, sig)
 
 
+class TestDesignLowpassFir:
+    def test_shape(self):
+        coeffs = md.design_lowpass_fir(64, cutoff_freq=4000.0,
+                                        sample_rate=44100.0, kaiser_beta=5.0)
+        assert coeffs.shape == (64,)
+        assert coeffs.dtype == np.float64
+
+    def test_filter_attenuates_high_freq(self):
+        sr = 16000.0
+        coeffs = md.design_lowpass_fir(65, cutoff_freq=2000.0,
+                                        sample_rate=sr, kaiser_beta=8.0)
+        # Apply to a high-frequency signal
+        high = md.sine_wave(4096, freq=6000.0, sample_rate=sr)
+        filtered = md.fir_filter(high, coeffs)
+        assert md.rms(filtered) < md.rms(high) * 0.3
+
+    def test_filter_passes_low_freq(self):
+        sr = 16000.0
+        coeffs = md.design_lowpass_fir(65, cutoff_freq=4000.0,
+                                        sample_rate=sr, kaiser_beta=5.0)
+        low = md.sine_wave(4096, freq=500.0, sample_rate=sr)
+        filtered = md.fir_filter(low, coeffs)
+        # Should pass through with minimal attenuation (after startup transient)
+        assert md.rms(filtered[100:]) > md.rms(low[100:]) * 0.5
+
+
 class TestConvolutionFftOla:
     def test_impulse_response(self, impulse_100):
         kernel = np.array([1.0, 2.0, 3.0])
@@ -124,3 +150,6 @@ class TestConstants:
         assert md.PEQ == 4
         assert md.LSH == 5
         assert md.HSH == 6
+
+    def test_steg_spectext_constant(self):
+        assert md.STEG_SPECTEXT == 2

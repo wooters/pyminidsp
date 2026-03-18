@@ -14,6 +14,8 @@ Example:
 from pyminidsp._core import *  # noqa: F401, F403
 from pyminidsp._core import (
     # Re-export everything explicitly for documentation
+    # Math utilities
+    bessel_i0, sinc,
     # Signal measurement
     dot, entropy, energy, power, power_db,
     # Signal analysis
@@ -23,14 +25,15 @@ from pyminidsp._core import (
     delay_echo, tremolo, comb_reverb,
     # FIR / Convolution
     convolution_num_samples, convolution_time, moving_average,
-    fir_filter, convolution_fft_ola,
+    fir_filter, design_lowpass_fir, convolution_fft_ola,
     # Scaling
     scale, scale_vec, fit_within_range, adjust_dblevel,
     # Spectrum
+    lowpass_brickwall,
     magnitude_spectrum, power_spectral_density, phase_spectrum,
     stft_num_frames, stft, mel_filterbank, mel_energies, mfcc,
     # Windows
-    hann_window, hamming_window, blackman_window, rect_window,
+    hann_window, hamming_window, blackman_window, rect_window, kaiser_window,
     # Generators
     sine_wave, white_noise, impulse, chirp_linear, chirp_log,
     square_wave, sawtooth_wave, shepard_tone,
@@ -45,11 +48,13 @@ from pyminidsp._core import (
     # Steganography
     steg_capacity, steg_encode, steg_decode,
     steg_encode_bytes, steg_decode_bytes, steg_detect,
+    # Resampling
+    resample_output_len, resample,
     # Biquad
     BiquadFilter,
     # Constants
     LPF, HPF, BPF, NOTCH, PEQ, LSH, HSH,
-    STEG_LSB, STEG_FREQ_BAND, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
+    STEG_LSB, STEG_FREQ_BAND, STEG_SPECTEXT, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
     GCC_SIMP, GCC_PHAT,
 )
 
@@ -60,6 +65,8 @@ try:
 except _PNF:
     __version__ = "0.0.0"  # not installed via pip (e.g. editable dev checkout)
 __all__ = [
+    # Math utilities
+    "bessel_i0", "sinc",
     # Signal measurement
     "dot", "entropy", "energy", "power", "power_db",
     # Signal analysis
@@ -69,14 +76,16 @@ __all__ = [
     "delay_echo", "tremolo", "comb_reverb",
     # FIR / Convolution
     "convolution_num_samples", "convolution_time", "moving_average",
-    "fir_filter", "convolution_fft_ola",
+    "fir_filter", "design_lowpass_fir", "convolution_fft_ola",
     # Scaling
     "scale", "scale_vec", "fit_within_range", "adjust_dblevel",
     # Spectrum
+    "lowpass_brickwall",
     "magnitude_spectrum", "power_spectral_density", "phase_spectrum",
     "stft_num_frames", "stft", "mel_filterbank", "mel_energies", "mfcc",
     # Windows
     "hann_window", "hamming_window", "blackman_window", "rect_window",
+    "kaiser_window",
     # Generators
     "sine_wave", "white_noise", "impulse", "chirp_linear", "chirp_log",
     "square_wave", "sawtooth_wave", "shepard_tone",
@@ -91,10 +100,12 @@ __all__ = [
     # Steganography
     "steg_capacity", "steg_encode", "steg_decode",
     "steg_encode_bytes", "steg_decode_bytes", "steg_detect",
+    # Resampling
+    "resample_output_len", "resample",
     # Biquad
     "BiquadFilter",
     # Constants
     "LPF", "HPF", "BPF", "NOTCH", "PEQ", "LSH", "HSH",
-    "STEG_LSB", "STEG_FREQ_BAND", "STEG_TYPE_TEXT", "STEG_TYPE_BINARY",
+    "STEG_LSB", "STEG_FREQ_BAND", "STEG_SPECTEXT", "STEG_TYPE_TEXT", "STEG_TYPE_BINARY",
     "GCC_SIMP", "GCC_PHAT",
 ]

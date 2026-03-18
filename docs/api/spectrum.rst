@@ -4,6 +4,23 @@ Spectral Analysis
 FFT-based frequency-domain analysis: magnitude spectrum, power spectral
 density, phase spectrum, STFT, mel filterbanks, and MFCCs.
 
+.. autofunction:: pyminidsp.lowpass_brickwall
+
+   Apply an FFT-based ideal (brickwall) lowpass filter.  Zeroes all
+   frequency bins above the cutoff frequency.  Unlike FIR filters, a
+   brickwall filter has a perfectly sharp transition — no passband ripple,
+   no transition band — but can introduce ringing (Gibbs phenomenon).
+
+   :param signal: Input signal.
+   :param cutoff_hz: Cutoff frequency in Hz.
+   :param sample_rate: Sampling rate in Hz.
+   :returns: Filtered signal (same length as input).
+
+   .. code-block:: python
+
+      signal = md.sine_wave(4096, freq=440.0, sample_rate=44100.0)
+      filtered = md.lowpass_brickwall(signal, cutoff_hz=1000.0, sample_rate=44100.0)
+
 .. autofunction:: pyminidsp.magnitude_spectrum
 
    Compute the magnitude spectrum of a real-valued signal.

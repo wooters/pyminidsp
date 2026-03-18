@@ -44,6 +44,10 @@ Steganography methods
 
    Near-ultrasonic frequency-band modulation / BFSK (1).
 
+.. data:: pyminidsp.STEG_SPECTEXT
+
+   Hybrid LSB + spectrogram text art encoding (2).
+
 .. data:: pyminidsp.STEG_TYPE_TEXT
 
    Payload type: text / null-terminated string (0).

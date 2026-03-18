@@ -1,12 +1,35 @@
 """FFT-based spectrum analysis, STFT, mel filterbanks, MFCCs, and window functions."""
 
-from pyminidsp._minidsp_cffi import lib
+import numpy as np
+
+from pyminidsp._minidsp_cffi import ffi, lib
 from pyminidsp._helpers import _as_double_ptr, _new_double_array
 
 
 # ---------------------------------------------------------------------------
 # FFT / Spectrum analysis
 # ---------------------------------------------------------------------------
+
+def lowpass_brickwall(signal, cutoff_hz, sample_rate):
+    """
+    Apply an FFT-based ideal (brickwall) lowpass filter.
+
+    Zeroes all frequency bins above the cutoff frequency. Operates by
+    copying the signal, applying the filter in-place, and returning the result.
+
+    Args:
+        signal: Input signal.
+        cutoff_hz: Cutoff frequency in Hz.
+        sample_rate: Sampling rate in Hz.
+
+    Returns:
+        numpy array of the same length as the input.
+    """
+    signal = np.ascontiguousarray(signal, dtype=np.float64)
+    out = signal.copy()
+    out_ptr = ffi.cast("double *", out.ctypes.data)
+    lib.MD_lowpass_brickwall(out_ptr, len(out), float(cutoff_hz), float(sample_rate))
+    return out
 
 def magnitude_spectrum(signal):
     """
@@ -172,4 +195,24 @@ def rect_window(n):
     """Generate a rectangular window of length n (all ones)."""
     out, out_ptr = _new_double_array(n)
     lib.MD_Gen_Rect_Win(out_ptr, n)
+    return out
+
+
+def kaiser_window(n, beta):
+    """
+    Generate a Kaiser window of length n with shape parameter beta.
+
+    Unlike other window functions, Kaiser windows require a beta parameter
+    that controls the trade-off between main-lobe width and side-lobe level.
+    Higher beta gives lower sidelobes but a wider main lobe.
+
+    Args:
+        n: Window length.
+        beta: Shape parameter (typical values: 5-14).
+
+    Returns:
+        numpy array of length n.
+    """
+    out, out_ptr = _new_double_array(n)
+    lib.MD_Gen_Kaiser_Win(out_ptr, n, float(beta))
     return out

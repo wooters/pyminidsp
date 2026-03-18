@@ -42,6 +42,20 @@ def power_db(a):
 
 
 # ---------------------------------------------------------------------------
+# Math utilities
+# ---------------------------------------------------------------------------
+
+def bessel_i0(x):
+    """Compute the zeroth-order modified Bessel function of the first kind."""
+    return lib.MD_bessel_i0(float(x))
+
+
+def sinc(x):
+    """Compute the normalized sinc function: sin(pi*x) / (pi*x), with sinc(0) = 1."""
+    return lib.MD_sinc(float(x))
+
+
+# ---------------------------------------------------------------------------
 # Signal analysis
 # ---------------------------------------------------------------------------
 

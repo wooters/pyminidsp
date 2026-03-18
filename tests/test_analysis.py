@@ -8,6 +8,32 @@ import pytest
 import pyminidsp as md
 
 
+class TestBesselI0:
+    def test_at_zero(self):
+        assert md.bessel_i0(0.0) == pytest.approx(1.0)
+
+    def test_at_one(self):
+        assert md.bessel_i0(1.0) == pytest.approx(1.2660658, rel=1e-5)
+
+    def test_positive_value(self):
+        # I0 is monotonically increasing for x > 0
+        assert md.bessel_i0(5.0) > md.bessel_i0(1.0)
+
+
+class TestSinc:
+    def test_at_zero(self):
+        assert md.sinc(0.0) == pytest.approx(1.0)
+
+    def test_at_integer(self):
+        # sinc(n) = 0 for all nonzero integers
+        assert md.sinc(1.0) == pytest.approx(0.0, abs=1e-10)
+        assert md.sinc(2.0) == pytest.approx(0.0, abs=1e-10)
+
+    def test_at_half(self):
+        # sinc(0.5) = sin(pi/2) / (pi/2) = 2/pi
+        assert md.sinc(0.5) == pytest.approx(2.0 / math.pi, rel=1e-5)
+
+
 class TestDotProduct:
     def test_basic(self):
         a = np.array([1.0, 2.0, 3.0])

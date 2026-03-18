@@ -28,9 +28,14 @@ frequency bins caused by discontinuities at block edges.
      - 0.0
      - Lowest
      - Widest
+   * - Kaiser
+     - configurable
+     - configurable (via *beta*)
+     - configurable (via *beta*)
 
 Hanning is an effective default.  Blackman excels when minimising leakage
-takes priority over frequency resolution.
+takes priority over frequency resolution.  Kaiser is the most flexible —
+its *beta* parameter lets you dial in exact sidelobe/main-lobe trade-offs.
 
 .. autofunction:: pyminidsp.hann_window
 
@@ -66,3 +71,23 @@ takes priority over frequency resolution.
 
    Generate a rectangular window (all ones).  Useful as a baseline
    reference — equivalent to no tapering.
+
+.. autofunction:: pyminidsp.kaiser_window
+
+   Generate a Kaiser window of length *n* with shape parameter *beta*.
+
+   Unlike the other window functions, Kaiser windows take a *beta*
+   parameter that controls the trade-off between main-lobe width and
+   side-lobe level:
+
+   - *beta* ≈ 5: similar to Hamming
+   - *beta* ≈ 8.6: similar to Blackman
+   - *beta* ≈ 14: very high sidelobe suppression
+
+   .. math::
+
+      w[n] = \frac{I_0\!\left(\beta\sqrt{1 - \left(\frac{2n}{N-1} - 1\right)^2}\right)}{I_0(\beta)}
+
+   :param n: Window length.
+   :param beta: Shape parameter.
+   :returns: Array of length *n*.

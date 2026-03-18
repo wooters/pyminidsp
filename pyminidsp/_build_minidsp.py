@@ -67,6 +67,9 @@ ffibuilder.cdef("""
     void MD_fir_filter(const double *signal, unsigned signal_len,
                        const double *coeffs, unsigned num_taps,
                        double *out);
+    void MD_design_lowpass_fir(double *coeffs, unsigned num_taps,
+                               double cutoff_freq, double sample_rate,
+                               double kaiser_beta);
     void MD_convolution_fft_ola(const double *signal, unsigned signal_len,
                                 const double *kernel, unsigned kernel_len,
                                 double *out);
@@ -84,6 +87,8 @@ ffibuilder.cdef("""
                            unsigned N, double dblevel);
 
     /* FFT / Spectrum analysis */
+    void MD_lowpass_brickwall(double *signal, unsigned len,
+                              double cutoff_hz, double sample_rate);
     void MD_magnitude_spectrum(const double *signal, unsigned N, double *mag_out);
     void MD_power_spectral_density(const double *signal, unsigned N, double *psd_out);
     void MD_phase_spectrum(const double *signal, unsigned N, double *phase_out);
@@ -105,11 +110,16 @@ ffibuilder.cdef("""
                  double min_freq_hz, double max_freq_hz,
                  double *mfcc_out);
 
+    /* Math utilities */
+    double MD_bessel_i0(double x);
+    double MD_sinc(double x);
+
     /* Window generation */
     void MD_Gen_Hann_Win(double *out, unsigned n);
     void MD_Gen_Hamming_Win(double *out, unsigned n);
     void MD_Gen_Blackman_Win(double *out, unsigned n);
     void MD_Gen_Rect_Win(double *out, unsigned n);
+    void MD_Gen_Kaiser_Win(double *out, unsigned n, double beta);
 
     /* Signal generators */
     void MD_sine_wave(double *output, unsigned N, double amplitude,
@@ -162,6 +172,14 @@ ffibuilder.cdef("""
                                  const char *text,
                                  double freq_lo, double freq_hi,
                                  double duration_sec, double sample_rate);
+
+    /* Resampling */
+    unsigned MD_resample_output_len(unsigned input_len,
+                                    double in_rate, double out_rate);
+    unsigned MD_resample(const double *input, unsigned input_len,
+                         double *output, unsigned max_output_len,
+                         double in_rate, double out_rate,
+                         unsigned num_zero_crossings, double kaiser_beta);
 
     /* Steganography */
     unsigned MD_steg_capacity(unsigned signal_len, double sample_rate, int method);
@@ -245,6 +263,7 @@ _core_sources = [
     "src/minidsp_spectext.c",
     "src/minidsp_steg.c",
     "src/minidsp_gcc.c",
+    "src/minidsp_resample.c",
     "src/biquad.c",
 ]
 

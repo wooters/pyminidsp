@@ -8,6 +8,29 @@ import pytest
 import pyminidsp as md
 
 
+class TestLowpassBrickwall:
+    def test_shape_preserved(self):
+        sig = md.sine_wave(1024, freq=440.0, sample_rate=44100.0)
+        out = md.lowpass_brickwall(sig, cutoff_hz=4000.0, sample_rate=44100.0)
+        assert out.shape == sig.shape
+
+    def test_removes_high_frequencies(self):
+        sr = 16000.0
+        # Mix a 500 Hz tone and a 6000 Hz tone
+        low = md.sine_wave(4096, freq=500.0, sample_rate=sr)
+        high = md.sine_wave(4096, freq=6000.0, sample_rate=sr)
+        mixed = md.mix(low, high, w_a=1.0, w_b=1.0)
+        filtered = md.lowpass_brickwall(mixed, cutoff_hz=2000.0, sample_rate=sr)
+        # High frequency should be gone
+        assert md.rms(filtered) < md.rms(mixed) * 0.8
+
+    def test_preserves_low_frequencies(self):
+        sr = 16000.0
+        low = md.sine_wave(4096, freq=500.0, sample_rate=sr)
+        filtered = md.lowpass_brickwall(low, cutoff_hz=4000.0, sample_rate=sr)
+        np.testing.assert_allclose(filtered, low, atol=0.01)
+
+
 class TestMagnitudeSpectrum:
     def test_shape(self):
         sig = md.sine_wave(1024, freq=440.0, sample_rate=44100.0)
@@ -158,6 +181,28 @@ class TestBlackmanWindow:
     def test_symmetry(self):
         win = md.blackman_window(256)
         np.testing.assert_allclose(win, win[::-1], atol=1e-10)
+
+
+class TestKaiserWindow:
+    def test_shape(self):
+        win = md.kaiser_window(256, beta=5.0)
+        assert win.shape == (256,)
+
+    def test_peak_at_center(self):
+        win = md.kaiser_window(256, beta=5.0)
+        peak_idx = np.argmax(win)
+        assert abs(peak_idx - 128) <= 1
+
+    def test_symmetry(self):
+        win = md.kaiser_window(256, beta=5.0)
+        np.testing.assert_allclose(win, win[::-1], atol=1e-10)
+
+    def test_beta_controls_shape(self):
+        # Higher beta = narrower window (more tapered edges)
+        win_low = md.kaiser_window(256, beta=2.0)
+        win_high = md.kaiser_window(256, beta=14.0)
+        # Window with higher beta should have lower edge values
+        assert win_high[0] < win_low[0]
 
 
 class TestRectWindow:

@@ -104,6 +104,14 @@ md.shutdown()
 | `hamming_window(n)` | Hamming window |
 | `blackman_window(n)` | Blackman window |
 | `rect_window(n)` | Rectangular window |
+| `kaiser_window(n, beta)` | Kaiser window (configurable shape) |
+
+### Math Utilities
+
+| Function | Description |
+|----------|-------------|
+| `bessel_i0(x)` | Zeroth-order modified Bessel function I₀ |
+| `sinc(x)` | Normalized sinc function |
 
 ### Signal Measurement
 
@@ -147,7 +155,16 @@ md.shutdown()
 | `convolution_num_samples(signal_len, kernel_len)` | Output length of linear convolution |
 | `moving_average(signal, window_len)` | Moving average filter |
 | `fir_filter(signal, coeffs)` | FIR filter |
+| `design_lowpass_fir(num_taps, cutoff, sr, beta)` | Design Kaiser-windowed lowpass FIR |
+| `lowpass_brickwall(signal, cutoff_hz, sr)` | FFT-based ideal lowpass filter |
 | `BiquadFilter(type, freq, sample_rate)` | IIR biquad filter (LPF/HPF/BPF/etc.) |
+
+### Resampling
+
+| Function | Description |
+|----------|-------------|
+| `resample(signal, in_rate, out_rate)` | Polyphase sinc resampler |
+| `resample_output_len(input_len, in_rate, out_rate)` | Compute resampled output length |
 
 ### DTMF
 
@@ -187,7 +204,7 @@ md.shutdown()
 | Constant | Description |
 |----------|-------------|
 | `LPF`, `HPF`, `BPF`, `NOTCH`, `PEQ`, `LSH`, `HSH` | Biquad filter types |
-| `STEG_LSB`, `STEG_FREQ_BAND` | Steganography methods |
+| `STEG_LSB`, `STEG_FREQ_BAND`, `STEG_SPECTEXT` | Steganography methods |
 | `STEG_TYPE_TEXT`, `STEG_TYPE_BINARY` | Steganography payload types |
 | `GCC_SIMP`, `GCC_PHAT` | GCC weighting modes |
 

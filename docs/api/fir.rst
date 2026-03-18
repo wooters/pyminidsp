@@ -51,6 +51,26 @@ general FIR filtering.
    :param coeffs: FIR coefficients.
    :returns: Array of the same length as the input.
 
+.. autofunction:: pyminidsp.design_lowpass_fir
+
+   Design a Kaiser-windowed sinc lowpass FIR filter.
+
+   Returns a set of FIR filter coefficients that can be passed directly
+   to :func:`fir_filter`.  The Kaiser window's *beta* parameter controls
+   the trade-off between stopband attenuation and transition width.
+
+   :param num_taps: Number of filter coefficients (filter order + 1).
+   :param cutoff_freq: Cutoff frequency in Hz.
+   :param sample_rate: Sampling rate in Hz.
+   :param kaiser_beta: Kaiser window shape parameter (default 5.0).
+   :returns: Array of length *num_taps*.
+
+   .. code-block:: python
+
+      coeffs = md.design_lowpass_fir(65, cutoff_freq=4000.0,
+                                      sample_rate=44100.0, kaiser_beta=8.0)
+      filtered = md.fir_filter(signal, coeffs)
+
 .. autofunction:: pyminidsp.convolution_fft_ola
 
    Full linear convolution using FFT overlap-add.  Produces the same
