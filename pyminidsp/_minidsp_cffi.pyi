@@ -1,6 +1,6 @@
 """Type stub for the CFFI-generated _minidsp_cffi extension module."""
 
-from typing import Any, overload
+from typing import Any, Callable, overload
 
 # ---------------------------------------------------------------------------
 # CFFI pointer / buffer types (opaque to the type checker)
@@ -24,6 +24,7 @@ class _FFI:
     def buffer(self, cdata: CData, size: int = ...) -> Any: ...
     def from_buffer(self, cdecl: str, python_buffer: Any) -> CData: ...
     def gc(self, cdata: CData, destructor: Any) -> CData: ...
+    def def_extern(self) -> Callable[..., Any]: ...
 
 ffi: _FFI
 
@@ -32,6 +33,14 @@ ffi: _FFI
 # ---------------------------------------------------------------------------
 
 class _Lib:
+    # --- Error handling ---
+    MD_ERR_NULL_POINTER: int
+    MD_ERR_INVALID_SIZE: int
+    MD_ERR_INVALID_RANGE: int
+    MD_ERR_ALLOC_FAILED: int
+    _pyminidsp_error_handler: CData
+    def MD_set_error_handler(self, handler: CData) -> None: ...
+
     # --- Basic signal measurement ---
     def MD_dot(self, a: CData, b: CData, N: int) -> float: ...
     def MD_entropy(self, a: CData, N: int, clip: bool) -> float: ...

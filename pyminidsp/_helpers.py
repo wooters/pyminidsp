@@ -39,7 +39,7 @@ _error_state = threading.local()
 
 
 @ffi.def_extern()
-def _pyminidsp_error_handler(code: int, func_name: object, message: object) -> None:
+def _pyminidsp_error_handler(code: int, func_name: CData, message: CData) -> None:
     """CFFI callback invoked by the C library on error."""
     _error_state.error = (
         int(code),
