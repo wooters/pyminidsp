@@ -63,9 +63,26 @@ def _generate_plots(app):
         print("Interactive plots will not be available in the built docs.")
 
 
+def _generate_llms_txt(app, exception):
+    """Generate llms.txt and llms-full.txt into the build output directory."""
+    if exception:
+        return
+    try:
+        # Add scripts/ to path so we can import the generator
+        scripts_dir = os.path.join(os.path.dirname(app.srcdir), "scripts")
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        from gen_llms_txt import generate
+        print("Generating llms.txt and llms-full.txt...")
+        generate(app.outdir)
+    except ImportError as exc:
+        print(f"Warning: llms.txt generation skipped: {exc}")
+
+
 def setup(app):
     app.connect("builder-inited", _generate_audio)
     app.connect("builder-inited", _generate_plots)
+    app.connect("build-finished", _generate_llms_txt)
 
 # -- Autodoc ------------------------------------------------------------------
 autodoc_mock_imports = ["pyminidsp._minidsp_cffi"]
