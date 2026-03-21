@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.6.0 (2026-03-21)
+-------------------
+
+- Upgraded miniDSP C library from v0.4.0 to v0.5.1.
+- New: ``VAD`` class — stateful voice activity detector with adaptive feature
+  normalization and onset/hangover smoothing.  Supports frame-by-frame
+  processing (``process_frame()``) and batch processing (``process()``).
+- New: ``VAD_NUM_FEATURES`` constant (value 5).
+
 0.5.0 (2026-03-18)
 -------------------
 

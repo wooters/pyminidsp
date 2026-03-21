@@ -59,6 +59,8 @@ from pyminidsp._core import (
     LPF, HPF, BPF, NOTCH, PEQ, LSH, HSH,
     STEG_LSB, STEG_FREQ_BAND, STEG_SPECTEXT, STEG_TYPE_TEXT, STEG_TYPE_BINARY,
     GCC_SIMP, GCC_PHAT,
+    # VAD
+    VAD, VAD_NUM_FEATURES,
 )
 
 from importlib.metadata import version as _version, PackageNotFoundError as _PNF
@@ -114,4 +116,6 @@ __all__ = [
     "LPF", "HPF", "BPF", "NOTCH", "PEQ", "LSH", "HSH",
     "STEG_LSB", "STEG_FREQ_BAND", "STEG_SPECTEXT", "STEG_TYPE_TEXT", "STEG_TYPE_BINARY",
     "GCC_SIMP", "GCC_PHAT",
+    # VAD
+    "VAD", "VAD_NUM_FEATURES",
 ]

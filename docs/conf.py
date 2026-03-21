@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(".."))
 project = "pyminidsp"
 copyright = "2026, Chuck Wooters"
 author = "Chuck Wooters"
-release = "0.5.0"
+release = "0.6.0"
 
 # -- General configuration ----------------------------------------------------
 extensions = [

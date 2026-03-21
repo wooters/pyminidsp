@@ -218,6 +218,35 @@ ffibuilder.cdef("""
     int MD_steg_detect(const double *signal, unsigned signal_len,
                        double sample_rate, int *payload_type_out);
 
+    /* Voice Activity Detection (VAD) */
+    typedef struct {
+        double   weights[5];
+        double   threshold;
+        unsigned onset_frames;
+        unsigned hangover_frames;
+        double   adaptation_rate;
+        double   band_low_hz;
+        double   band_high_hz;
+    } MD_vad_params;
+
+    typedef struct {
+        MD_vad_params params;
+        double   feat_min[5];
+        double   feat_max[5];
+        unsigned onset_counter;
+        unsigned hangover_counter;
+        int      current_decision;
+        unsigned frames_processed;
+    } MD_vad_state;
+
+    void MD_vad_default_params(MD_vad_params *params);
+    void MD_vad_init(MD_vad_state *state, const MD_vad_params *params);
+    void MD_vad_calibrate(MD_vad_state *state, const double *signal,
+                          unsigned N, double sample_rate);
+    int MD_vad_process_frame(MD_vad_state *state, const double *signal,
+                             unsigned N, double sample_rate,
+                             double *score_out, double *features_out);
+
     /* === biquad.h === */
     typedef double smp_type;
 
@@ -282,6 +311,7 @@ _core_sources = [
     "src/minidsp_steg.c",
     "src/minidsp_gcc.c",
     "src/minidsp_resample.c",
+    "src/minidsp_vad.c",
     "src/biquad.c",
 ]
 

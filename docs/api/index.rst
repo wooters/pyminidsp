@@ -25,4 +25,5 @@ before being passed to the underlying C library.
    spectrogram_text
    steganography
    biquad
+   VAD
    constants

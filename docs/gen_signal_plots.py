@@ -922,7 +922,151 @@ def generate(output_dir):
                            n_fft=2048, hop=64, sample_rate=steg_sr)
 
     md.shutdown()
+
+    # ==================================================================
+    # Phase 11: VAD visualization
+    # ==================================================================
+    print("VAD visualization:")
+
+    vad_sr = 16000.0
+    vad_frame = 320  # 20 ms
+    # Two 0.3 s sine bursts at 1 kHz separated by silence
+    seg_silence = int(0.3 * vad_sr)
+    seg_tone = int(0.3 * vad_sr)
+    vad_signal = np.concatenate([
+        np.zeros(seg_silence),
+        md.sine_wave(seg_tone, amplitude=0.8, freq=1000.0, sample_rate=vad_sr),
+        np.zeros(seg_silence),
+        md.sine_wave(seg_tone, amplitude=0.8, freq=1000.0, sample_rate=vad_sr),
+        np.zeros(seg_silence),
+    ])
+
+    detector = md.VAD()
+    # Calibrate with the leading silence
+    cal_frames = 10
+    for i in range(cal_frames):
+        frame = vad_signal[i * vad_frame:(i + 1) * vad_frame]
+        detector.calibrate(frame, sample_rate=vad_sr)
+
+    num_frames = len(vad_signal) // vad_frame
+    vad_times = np.zeros(num_frames)
+    vad_peak_env = np.zeros(num_frames)
+    vad_scores = np.zeros(num_frames)
+    vad_decisions = np.zeros(num_frames)
+    vad_features = np.zeros((num_frames, 5))
+
+    for i in range(num_frames):
+        frame = vad_signal[i * vad_frame:(i + 1) * vad_frame]
+        vad_times[i] = (i * vad_frame + vad_frame / 2) / vad_sr
+        vad_peak_env[i] = np.max(np.abs(frame))
+        d, s, f = detector.process_frame(frame, vad_sr)
+        vad_decisions[i] = d
+        vad_scores[i] = s
+        vad_features[i] = f
+
+    write_vad_html(out("vad_visualization.html"),
+                   "Voice Activity Detection",
+                   vad_times, vad_peak_env, vad_features,
+                   vad_scores, vad_decisions, threshold=0.5)
+
+    md.shutdown()
     print("Done.")
+
+
+def write_vad_html(path, title, times, peak_env, features, scores, decisions, threshold):
+    """4-panel VAD visualization: waveform, features, score, decision."""
+    num_frames = len(times)
+    feat_names = ["Energy", "ZCR", "Spectral Entropy",
+                  "Spectral Flatness", "Band Energy Ratio"]
+    feat_colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
+
+    parts = [_head(title)]
+    parts.append(_js_array("times", times, fmt=".6g"))
+    parts.append(_js_array("peakEnv", peak_env))
+    parts.append(_js_array("scores", scores))
+    parts.append(_js_array("decisions", decisions.astype(int), fmt="d"))
+
+    for i in range(5):
+        col = features[:, i]
+        parts.append(_js_array(f"feat{i}", col))
+
+    parts.append(f"    const threshold = {threshold};\n")
+
+    # Build traces
+    parts.append("""
+    // Panel 1: Waveform (peak envelope)
+    const traceWave = {
+      x: times, y: peakEnv, type: 'scatter', mode: 'lines',
+      line: { color: '#1f77b4', width: 1 },
+      xaxis: 'x', yaxis: 'y',
+      hovertemplate: 't: %{x:.3f} s<br>peak: %{y:.4f}<extra></extra>'
+    };
+""")
+
+    # Feature traces
+    for i in range(5):
+        parts.append(f"""
+    const traceFeat{i} = {{
+      x: times, y: feat{i}, type: 'scatter', mode: 'lines',
+      name: '{feat_names[i]}', line: {{ color: '{feat_colors[i]}', width: 1 }},
+      xaxis: 'x2', yaxis: 'y2',
+      hovertemplate: 't: %{{x:.3f}} s<br>{feat_names[i]}: %{{y:.4f}}<extra></extra>'
+    }};
+""")
+
+    parts.append("""
+    // Panel 3: Score vs threshold
+    const traceScore = {
+      x: times, y: scores, type: 'scatter', mode: 'lines',
+      name: 'Score', line: { color: '#1f77b4', width: 1.5 },
+      xaxis: 'x3', yaxis: 'y3',
+      hovertemplate: 't: %{x:.3f} s<br>score: %{y:.4f}<extra></extra>'
+    };
+    const traceThresh = {
+      x: [times[0], times[times.length - 1]], y: [threshold, threshold],
+      type: 'scatter', mode: 'lines',
+      name: 'Threshold', line: { color: '#d62728', width: 1.5, dash: 'dash' },
+      xaxis: 'x3', yaxis: 'y3',
+      showlegend: true
+    };
+
+    // Panel 4: Decision
+    const traceDecision = {
+      x: times, y: decisions, type: 'scatter', mode: 'lines',
+      line: { color: '#2ca02c', width: 2, shape: 'hv' },
+      fill: 'tozeroy', fillcolor: 'rgba(44,160,44,0.2)',
+      xaxis: 'x4', yaxis: 'y4',
+      hovertemplate: 't: %{x:.3f} s<br>decision: %{y}<extra></extra>'
+    };
+""")
+
+    parts.append("""
+    const allTraces = [traceWave,
+      traceFeat0, traceFeat1, traceFeat2, traceFeat3, traceFeat4,
+      traceScore, traceThresh, traceDecision];
+
+    const layout = {
+      grid: { rows: 4, columns: 1, subplots: [['xy'],['x2y2'],['x3y3'],['x4y4']],
+              roworder: 'top to bottom', ygap: 0.08 },
+      xaxis:  { matches: 'x4', showticklabels: false },
+      xaxis2: { matches: 'x4', showticklabels: false },
+      xaxis3: { matches: 'x4', showticklabels: false },
+      xaxis4: { title: 'Time (s)' },
+      yaxis:  { title: 'Peak', range: [0, 1.05] },
+      yaxis2: { title: 'Features', range: [-0.05, 1.05] },
+      yaxis3: { title: 'Score', range: [-0.05, 1.05] },
+      yaxis4: { title: 'Decision', range: [-0.1, 1.3],
+                tickvals: [0, 1], ticktext: ['Silence', 'Speech'] },
+      showlegend: true,
+      legend: { orientation: 'h', y: -0.08, x: 0.5, xanchor: 'center' },
+      margin: { t: 30, r: 30, b: 60, l: 60 },
+      height: 700
+    };
+
+    Plotly.newPlot('plot', allTraces, layout, { responsive: true });
+""")
+    parts.append(_foot())
+    _write(path, "".join(parts))
 
 
 if __name__ == "__main__":

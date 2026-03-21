@@ -22,4 +22,5 @@ applicable — includes visualisations.
    dtmf
    shepard-tone
    spectrogram-text
+   voice-activity-detection
    audio-steganography
