@@ -42,6 +42,7 @@ MODULE_CATEGORIES: list[tuple[str, str]] = [
     ("_gcc", "GCC Delay Estimation"),
     ("_resampling", "Resampling"),
     ("_steganography", "Audio Steganography"),
+    ("_vad", "Voice Activity Detection"),
 ]
 
 # Guide ordering (matches docs/guides/index.rst toctree)
@@ -60,6 +61,7 @@ GUIDE_ORDER = [
     "dtmf",
     "shepard-tone",
     "spectrogram-text",
+    "voice-activity-detection",
     "audio-steganography",
 ]
 
