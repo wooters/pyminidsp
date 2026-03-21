@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# miniDSP C library (local clone)
+miniDSP/
+
 # CFFI build artifacts
 pyminidsp/_minidsp_cffi.c
 pyminidsp/_minidsp_cffi.o

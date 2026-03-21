@@ -18,4 +18,4 @@
 
 - [x] 4.1 Clone miniDSP v0.5.2 locally and run `MINIDSP_SRC=./miniDSP uv sync` to verify build
 - [x] 4.2 Run test suite against the new C library version
-- [ ] 4.3 Commit changes and tag `v0.6.1` to trigger CI publish
+- [x] 4.3 Commit changes and tag `v0.6.1` to trigger CI publish
