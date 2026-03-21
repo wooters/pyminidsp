@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.1 (2026-03-21)
+-------------------
+
+- Upgraded miniDSP C library from v0.5.1 to v0.5.2 (bug fix affecting VAD).
+
 0.6.0 (2026-03-21)
 -------------------
 
