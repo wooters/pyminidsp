@@ -8,4 +8,4 @@
 
 ## 3. Validation
 
-- [ ] 3.1 Trigger a manual workflow run and verify both `x86_64` and `aarch64` wheels are produced in the build artifacts
+- [x] 3.1 Trigger a manual workflow run and verify both `x86_64` and `aarch64` wheels are produced in the build artifacts
