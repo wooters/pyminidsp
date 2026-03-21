@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.6.2 (2026-03-21)
+-------------------
+
+- Added pre-built ``manylinux_aarch64`` wheels (linux/arm64), enabling
+  ``pip install pyminidsp`` inside Docker on Apple Silicon Macs.
+
 0.6.1 (2026-03-21)
 -------------------
 

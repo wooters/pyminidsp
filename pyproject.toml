@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyminidsp"
-version = "0.6.1"
+version = "0.6.2"
 description = "Python bindings to the miniDSP C library"
 readme = "README.md"
 license = {text = "MIT"}
