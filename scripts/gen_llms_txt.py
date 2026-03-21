@@ -11,8 +11,8 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib
 import inspect
-import os
 import re
 import sys
 from pathlib import Path
@@ -30,40 +30,60 @@ PROJECT_DESC = (
 GITHUB_URL = "https://github.com/wooters/pyminidsp"
 DOCS_BASE_URL = "https://wooters.github.io/pyminidsp"
 
-# Maps source module name -> display category (in presentation order)
-MODULE_CATEGORIES: list[tuple[str, str]] = [
-    ("_helpers", "Constants & Error Handling"),
-    ("_analysis", "Math Utilities, Signal Measurement, Analysis & Scaling"),
-    ("_effects", "Effects"),
-    ("_filters", "FIR / Convolution / Biquad"),
-    ("_spectral", "Spectrum, FFT, Mel, MFCC & Windows"),
-    ("_generators", "Signal Generators"),
-    ("_dtmf", "DTMF"),
-    ("_gcc", "GCC Delay Estimation"),
-    ("_resampling", "Resampling"),
-    ("_steganography", "Audio Steganography"),
-    ("_vad", "Voice Activity Detection"),
-]
+# Infrastructure modules that are not part of the public API
+_SKIP_MODULES = {"__init__", "_build_minidsp", "_core"}
 
-# Guide ordering (matches docs/guides/index.rst toctree)
-GUIDE_ORDER = [
-    "signal-generators",
-    "basic-signal-operations",
-    "window-functions",
-    "magnitude-spectrum",
-    "power-spectral-density",
-    "phase-spectrum",
-    "stft-spectrogram",
-    "mel-mfcc",
-    "pitch-detection",
-    "fir-convolution",
-    "simple-effects",
-    "dtmf",
-    "shepard-tone",
-    "spectrogram-text",
-    "voice-activity-detection",
-    "audio-steganography",
-]
+# ---------------------------------------------------------------------------
+# Auto-discovery
+# ---------------------------------------------------------------------------
+
+
+def _discover_modules() -> list[str]:
+    """Return sorted list of API module names (e.g. ``['_analysis', '_dtmf', ...]``)."""
+    pkg_dir = Path(__file__).resolve().parent.parent / "pyminidsp"
+    modules = []
+    for p in sorted(pkg_dir.glob("_*.py")):
+        name = p.stem
+        if name not in _SKIP_MODULES:
+            modules.append(name)
+    return modules
+
+
+def _category_name_from_module(mod_name: str) -> str:
+    """Return a display category name derived from a module's docstring."""
+    mod = importlib.import_module(f"pyminidsp.{mod_name}")
+    doc = getattr(mod, "__doc__", None)
+    if doc:
+        first_line = doc.strip().split("\n", 1)[0].rstrip(".")
+        return first_line
+    print(
+        f"Warning: pyminidsp/{mod_name}.py has no docstring, "
+        f"using filename as category name",
+        file=sys.stderr,
+    )
+    return mod_name.lstrip("_").replace("_", " ").title()
+
+
+def _parse_toctree(index_rst: Path) -> list[str]:
+    """Parse ``docs/guides/index.rst`` and return guide slugs in toctree order."""
+    text = index_rst.read_text(encoding="utf-8")
+    slugs: list[str] = []
+    in_toctree = False
+    for line in text.split("\n"):
+        if re.match(r"^\.\. toctree::", line):
+            in_toctree = True
+            continue
+        if in_toctree:
+            stripped = line.strip()
+            # Options like :maxdepth: or blank lines — skip
+            if not stripped or re.match(r"^:\w+:", stripped):
+                continue
+            # Non-indented, non-blank line ends the directive
+            if not line.startswith(" ") and stripped:
+                break
+            slugs.append(stripped)
+    return slugs
+
 
 # ---------------------------------------------------------------------------
 # API extraction
@@ -147,7 +167,8 @@ def extract_api(md) -> dict[str, list[tuple[str, str, str]]]:
 
     # Build category -> entries
     categories: dict[str, list[tuple[str, str, str]]] = {}
-    for mod_key, cat_name in MODULE_CATEGORIES:
+    for mod_key in _discover_modules():
+        cat_name = _category_name_from_module(mod_key)
         entries = []
         for name in md.__all__:  # preserve __all__ order
             if name not in all_names:
@@ -346,7 +367,8 @@ def extract_guides(docs_dir: Path) -> list[tuple[str, str]]:
     """
     guides_dir = docs_dir / "guides"
     guides = []
-    for slug in GUIDE_ORDER:
+    guide_order = _parse_toctree(guides_dir / "index.rst")
+    for slug in guide_order:
         rst_path = guides_dir / f"{slug}.rst"
         if not rst_path.exists():
             print(f"Warning: guide not found: {rst_path}", file=sys.stderr)
