@@ -81,6 +81,7 @@ MINIDSP_SRC = "/tmp/miniDSP"
 
 # --- Linux ---
 [tool.cibuildwheel.linux]
+archs = "x86_64 aarch64"
 before-all = [
     "yum install -y fftw-devel || dnf install -y fftw-devel || (apt-get update && apt-get install -y libfftw3-dev)",
     "git clone --depth 1 --branch v0.5.2 https://github.com/wooters/miniDSP.git /tmp/miniDSP",
