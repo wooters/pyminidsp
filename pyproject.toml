@@ -103,4 +103,4 @@ python-version = "3.9"
 
 [tool.ty.src]
 include = ["pyminidsp"]
-exclude = ["pyminidsp/_build_minidsp.py"]
+exclude = ["pyminidsp/_build_minidsp.py", "pyminidsp/_vad.py"]
